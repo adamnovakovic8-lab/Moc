@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>document.documentElement.className += ' js';</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — mdot.blends</title>
+  <meta name="description" content="Meet mdot — a young Ontario barber obsessed with clean fades, sharp lineups and razor designs." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Shade&family=Barlow+Condensed:wght@500;600;700;800;900&family=Rubik+Spray+Paint&family=Permanent+Marker&display=swap" rel="stylesheet" />
+  <link rel="icon" href="media/logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="inner">
+  <div class="curtain" id="curtain" aria-hidden="true"><div class="curtain__center"><img class="curtain__logo" src="media/logo.png" alt="mdot.blends" /><span class="curtain__bar"></span></div></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ===== NAV ===== -->
+  <header class="nav" id="nav">
+    <div class="nav__inner container">
+      <a href="index.html" class="brand">
+        <img class="brand__logo" src="media/logo.png" alt="mdot.blends barber" />
+      </a>
+      <nav class="nav__links" id="navLinks">
+        <a href="services.html">Services</a>
+        <a href="locations.html">Locations</a>
+        <a href="work.html">Work</a>
+        <a href="about.html" aria-current="page">About</a>
+        <a href="book.html" class="nav__cta">Book</a>
+      </nav>
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <div class="page-hero__bg" aria-hidden="true"></div>
+    <div class="container">
+      <span class="page-hero__eyebrow tag tag--acid">04 — Behind the clippers</span>
+      <h1 class="page-hero__title reveal">Meet mdot<span class="dot">.</span></h1>
+      <p class="page-hero__lead reveal">The story behind the chair — and what to expect when you sit down.</p>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="section section--after-hero about">
+    <div class="container about__inner">
+      <figure class="about__media reveal about__photo">
+        <span class="sticker sticker--blue">the barber</span>
+        <img src="media/poster-3.jpg" alt="mdot.blends at work" />
+        <figcaption>in the chair</figcaption>
+      </figure>
+      <div class="about__content reveal">
+        <p>
+          What started as cutting friends in the basement turned into a craft.
+          I'm a young Ontario barber obsessed with the details — the perfect
+          <strong>blend</strong>, the crispest lineup, and making sure you leave
+          the chair feeling like the best version of yourself.
+        </p>
+        <p>
+          Whether you're in <strong>Woodbridge</strong> or down at
+          <strong>Sherkston Shores</strong> for the summer, the goal is the same:
+          a relaxed vibe, a clean cut, and a fresh fade every single time.
+        </p>
+        <ul class="about__list">
+          <li>Precision fades &amp; razor designs</li>
+          <li>Clean, sanitized tools every client</li>
+          <li>On-time, no rushed appointments</li>
+        </ul>
+        <a href="book.html" class="btn btn--primary">Book your cut ✂</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a href="index.html" class="brand brand--footer">
+        <img class="brand__logo" src="media/logo.png" alt="mdot.blends barber" />
+      </a>
+      <p class="footer__tag">Sharp cuts &amp; clean blends · Woodbridge &amp; Sherkston Shores, ON</p>
+      <div class="footer__social">
+        <a href="https://instagram.com/mdot.blends" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://tiktok.com/@mdot.blends" target="_blank" rel="noopener">TikTok</a>
+        <a href="book.html">Book</a>
+      </div>
+      <p class="footer__copy">© <span id="year"></span> mdot.blends — all cuts reserved.</p>
+    </div>
+  </footer>
+
+  <a href="book.html" class="fab" aria-label="Book now">book ✂</a>
+
+  <script src="script.js"></script>
+</body>
+</html>

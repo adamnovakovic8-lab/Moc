@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>document.documentElement.className += ' js';</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services &amp; Pricing — mdot.blends</title>
+  <meta name="description" content="Haircuts, skin fades, beard work and add-ons by mdot.blends. Clear pricing for Woodbridge and Sherkston Shores, Ontario." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Shade&family=Barlow+Condensed:wght@500;600;700;800;900&family=Rubik+Spray+Paint&family=Permanent+Marker&display=swap" rel="stylesheet" />
+  <link rel="icon" href="media/logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="inner">
+  <div class="curtain" id="curtain" aria-hidden="true"><div class="curtain__center"><img class="curtain__logo" src="media/logo.png" alt="mdot.blends" /><span class="curtain__bar"></span></div></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ===== NAV ===== -->
+  <header class="nav" id="nav">
+    <div class="nav__inner container">
+      <a href="index.html" class="brand">
+        <img class="brand__logo" src="media/logo.png" alt="mdot.blends barber" />
+      </a>
+      <nav class="nav__links" id="navLinks">
+        <a href="services.html" aria-current="page">Services</a>
+        <a href="locations.html">Locations</a>
+        <a href="work.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="book.html" class="nav__cta">Book Now</a>
+      </nav>
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <div class="page-hero__bg"></div>
+    <div class="container">
+      <span class="page-hero__eyebrow tag tag--acid">01 — The menu</span>
+      <h1 class="page-hero__title reveal">Services<span class="dot">.</span></h1>
+      <p class="page-hero__lead reveal">Every cut finishes with a hot-towel, lineup and styling. No rushed chairs — just clean work.</p>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section class="section section--after-hero services">
+    <div class="container">
+      <div class="cards">
+        <article class="card reveal">
+          <div class="card__top">
+            <h3>Signature Cut</h3>
+            <span class="card__price">$35</span>
+          </div>
+          <p>Custom haircut tailored to your style — scissor work, clipper blend, lineup and finish.</p>
+          <span class="card__time">≈ 45 min</span>
+        </article>
+
+        <article class="card card--featured reveal">
+          <span class="card__badge sticker">most booked</span>
+          <div class="card__top">
+            <h3>Cut + Beard</h3>
+            <span class="card__price">$45</span>
+          </div>
+          <p>Full haircut paired with a sculpted beard line, hot-towel and razor detailing.</p>
+          <span class="card__time">≈ 60 min</span>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__top">
+            <h3>Skin Fade</h3>
+            <span class="card__price">$40</span>
+          </div>
+          <p>Bald/skin fade taken down clean with a seamless blend and crisp lineup.</p>
+          <span class="card__time">≈ 50 min</span>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__top">
+            <h3>Kids Cut <span class="muted">(12 &amp; under)</span></h3>
+            <span class="card__price">$25</span>
+          </div>
+          <p>Patient, friendly cuts for the young ones — first haircut to fresh fades.</p>
+          <span class="card__time">≈ 30 min</span>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__top">
+            <h3>Lineup / Edge-Up</h3>
+            <span class="card__price">$15</span>
+          </div>
+          <p>Sharp hairline and edge cleanup between cuts to keep you looking fresh.</p>
+          <span class="card__time">≈ 20 min</span>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__top">
+            <h3>Design / Parts</h3>
+            <span class="card__price">+$10</span>
+          </div>
+          <p>Add custom razor designs, hard parts or detailing to any cut.</p>
+          <span class="card__time">add-on</span>
+        </article>
+      </div>
+
+      <p class="services__note reveal">💳 Cash &amp; e-transfer accepted · Prices may vary by style &amp; length</p>
+
+      <div class="page-cta reveal">
+        <h2>Ready for a fresh cut?</h2>
+        <a href="book.html" class="btn btn--primary">Book an Appointment</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a href="index.html" class="brand brand--footer">
+        <img class="brand__logo" src="media/logo.png" alt="mdot.blends barber" />
+      </a>
+      <p class="footer__tag">Sharp cuts &amp; clean blends · Woodbridge &amp; Sherkston Shores, ON</p>
+      <div class="footer__social">
+        <a href="https://instagram.com/mdot.blends" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://tiktok.com/@mdot.blends" target="_blank" rel="noopener">TikTok</a>
+        <a href="book.html">Book</a>
+      </div>
+      <p class="footer__copy">© <span id="year"></span> mdot.blends. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <a href="book.html" class="fab" aria-label="Book now">Book ✂</a>
+
+  <script src="script.js"></script>
+</body>
+</html>
