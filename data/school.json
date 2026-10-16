@@ -1,0 +1,100 @@
+{
+  "name": "Corpus Christi Catholic Secondary School",
+  "team": "Longhorns",
+  "address": "5150 Upper Middle Rd, Burlington, ON L7L 0E5",
+  "phone": "905-331-5591",
+  "links": {
+    "website": "https://secondary.hcdsb.org/corpuschristi/",
+    "grade8": "https://secondary.hcdsb.org/corpuschristi/students/grade-8-information/",
+    "clubs": "https://secondary.hcdsb.org/corpuschristi/students/clubs-activities/",
+    "sports": "https://secondary.hcdsb.org/corpuschristi/students/sports/",
+    "schedule": "https://secondary.hcdsb.org/corpuschristi/about/daily-schedule/",
+    "uniform": "https://secondary.hcdsb.org/corpuschristi/about/uniform-policy/",
+    "volunteer": "https://secondary.hcdsb.org/corpuschristi/community-involvement-hours/",
+    "help": "https://secondary.hcdsb.org/corpuschristi/students/academic-support/",
+    "instagram": "https://www.instagram.com/corpuslonghorns/",
+    "bus": "https://www.haltonbus.ca/",
+    "wellbeing": "https://secondary.hcdsb.org/corpuschristi/students/mental-health-resources/"
+  },
+  "schedule": [
+    {
+      "label": "Period 1",
+      "start": "8:25",
+      "end": "9:40"
+    },
+    {
+      "label": "Period 2",
+      "start": "9:45",
+      "end": "11:00"
+    },
+    {
+      "label": "Period 3 + lunch",
+      "start": "11:00",
+      "end": "13:00",
+      "note": "Lunch A is 11:00 to 11:40, lunch B is 12:20 to 1:00. Your timetable says which one you have."
+    },
+    {
+      "label": "Period 4",
+      "start": "13:05",
+      "end": "14:20"
+    }
+  ],
+  "sports": {
+    "Fall": [
+      "Girls basketball (Jr, Sr)",
+      "Boys volleyball (Jr, Sr)",
+      "Cross country",
+      "Girls field hockey (Jr, Sr)",
+      "Football (Jr, Sr)",
+      "Boys golf",
+      "Girls golf"
+    ],
+    "Winter": [
+      "Badminton (Jr, Sr)",
+      "Boys basketball (Midget, Jr, Sr)",
+      "Girls hockey",
+      "Boys hockey (Jr, Sr)",
+      "Girls volleyball (Midget, Jr, Sr)"
+    ],
+    "Spring": [
+      "Varsity baseball",
+      "Girls rugby",
+      "Intramural football",
+      "Girls slow pitch",
+      "Boys soccer (Jr, Sr)",
+      "Girls soccer (Jr, Sr)",
+      "Tennis",
+      "Track and field"
+    ]
+  },
+  "clubs": [
+    "Announcement Team",
+    "Arts Festival",
+    "Athletic Council",
+    "Book Club",
+    "Choir",
+    "Christmas Assembly",
+    "Computer Club",
+    "Concert Band",
+    "Corpus HOSA (health careers)",
+    "Exercise Room",
+    "Greenhorns",
+    "Longhorns Art Club",
+    "Longhorns for Life",
+    "Math Contest Team",
+    "Mock Trial Team",
+    "Model UN (SOMA)",
+    "Prefects",
+    "SAC (Relay for Life, Run for the Cure, Trivia)",
+    "Safe Schools Committee",
+    "School Dances",
+    "School Play",
+    "School Reach Team",
+    "Science Olympics",
+    "Student Council",
+    "Student Eucharistic Ministers",
+    "Student Senate",
+    "Students for Students (social justice)",
+    "Yearbook"
+  ]
+}

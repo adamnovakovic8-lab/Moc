@@ -1,0 +1,59 @@
+<%- include('partials/header') %>
+<div class="split">
+  <div>
+    <div class="page-head">
+      <h1>Goal planner</h1>
+      <p class="lead">These are the goals I'd pick for a new Grade 9. Tick one off when you've done it. Your ticks save on this device only.</p>
+    </div>
+
+    <div class="agenda">
+      <div class="agenda-head">
+        <span>My Grade 9 goals</span>
+        <span class="agenda-count" aria-live="polite"><span id="goal-count">0</span> of <%= goals.length %> done</span>
+      </div>
+      <ul class="goals">
+        <% goals.forEach(goal => { %>
+          <li class="goal">
+            <label>
+              <input type="checkbox" data-goal="<%= goal.id %>">
+              <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span>
+              <span class="goal-text">
+                <strong><%= goal.title %></strong>
+                <span>Make it doable: <%= goal.doable %></span>
+              </span>
+            </label>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+
+  <aside class="how-to">
+    <h2>How to make a goal doable</h2>
+    <ol class="steps">
+      <li><strong>Make it specific.</strong> "Study 30 minutes on school nights" beats "study more."</li>
+      <li><strong>Write it down.</strong> In a journal or on your phone, anywhere you'll see it.</li>
+      <li><strong>Put the steps in your calendar.</strong> A step with a date on it actually happens.</li>
+      <li><strong>Check in every week.</strong> Take five minutes on Sunday. Still on track? If not, adjust.</li>
+    </ol>
+  </aside>
+</div>
+
+<section class="join" id="join">
+  <h2>Pick a team or a club</h2>
+  <p class="section-lead">Two of the goals above are "join a sport" and "join a club." Here's everything Corpus has, so you can pick one now. Grade 9s usually play on the Jr or Midget teams.</p>
+
+  <div class="seasons">
+    <% Object.entries(school.sports).forEach(([season, teams]) => { %>
+      <div class="season">
+        <h3><%= season %> sports</h3>
+        <ul class="chips"><% teams.forEach(t => { %><li><%= t %></li><% }) %></ul>
+      </div>
+    <% }) %>
+  </div>
+
+  <h3 class="clubs-head">Clubs and activities</h3>
+  <ul class="chips"><% school.clubs.forEach(c => { %><li><%= c %></li><% }) %></ul>
+  <p class="fine">From the school's <a href="<%= school.links.sports %>">sports</a> and <a href="<%= school.links.clubs %>">clubs</a> pages. Tryouts happen near the start of each season and get announced at school, so put the date in your calendar the day you hear it.</p>
+</section>
+<%- include('partials/footer') %>

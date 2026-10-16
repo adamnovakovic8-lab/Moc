@@ -1,0 +1,72 @@
+<%- include('partials/header') %>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1>Welcome to high school.</h1>
+      <p class="lead">A Grade 9 survival guide for Corpus Christi, written by a student who just finished Grade 9. It's everything I wish someone had told me in Grade 8.</p>
+      <div class="hero-actions">
+        <a class="btn" href="/tips">Read the top 10 tips</a>
+        <a class="btn btn-ghost" href="/story">My first week</a>
+      </div>
+    </div>
+    <img class="hero-img" src="/images/longhorn.jpg" alt="The Corpus Christi Longhorns logo on an orange background" width="1024" height="683">
+  </div>
+</section>
+
+<section class="today">
+  <div class="countdown">
+    <strong><%= daysLeft %></strong>
+    <span>days until the first day of Grade 9</span>
+  </div>
+  <a class="tip-of-day" href="/tips#tip-<%= tipOfDay.number %>">
+    <span class="tod-label">Today's tip, number <%= tipOfDay.number %></span>
+    <span class="tod-title"><%= tipOfDay.title %></span>
+    <span><%= tipOfDay.body %></span>
+  </a>
+</section>
+
+<section class="day">
+  <h2>A day at Corpus</h2>
+  <p class="section-lead">Four periods, each 75 minutes. The warning bell goes at 8:20, so aim to be at your locker by 8:15.
+    <% if (nowBlock) { %><strong class="now-label">Right now: <%= nowBlock %>.</strong><% } %>
+  </p>
+  <ol class="day-strip">
+    <% school.schedule.forEach(block => { %>
+      <li class="<%= block.label === nowBlock ? 'now' : '' %>" style="--mins: <%= block.mins %>">
+        <strong><%= block.label %></strong>
+        <span><%= clock(block.start) %> to <%= clock(block.end) %></span>
+        <% if (block.note) { %><small><%= block.note %></small><% } %>
+      </li>
+    <% }) %>
+  </ol>
+  <p class="fine">Times are from the school's <a href="<%= school.links.schedule %>">daily schedule</a>. School ends at 2:20.</p>
+</section>
+
+<section class="good-to-know">
+  <h2>Good to know before September</h2>
+  <ul class="facts">
+    <li><strong>You pick 8 courses in Grade 8.</strong> Six are required and you choose two electives. It's done online in myBlueprint, and guidance visits your Grade 8 class to explain it. <a href="<%= school.links.grade8 %>">This year's dates</a></li>
+    <li><strong>You need 40 volunteer hours to graduate.</strong> You can start counting them the summer before Grade 9. Getting a few done early is one less thing later. <a href="<%= school.links.volunteer %>">What counts</a></li>
+    <li><strong>There's a uniform.</strong> Check the rules before you go shopping. <a href="<%= school.links.uniform %>">Uniform policy</a></li>
+    <li><strong>There are <%= school.clubs.length %> clubs and over 20 teams.</strong> You don't have to be good at something to join. <a href="/goals#join">See the list</a></li>
+    <li><strong>Check if you can take the bus.</strong> Busing is run by Halton Student Transportation, not the school. Look up your route before the first day. <a href="<%= school.links.bus %>">Find your bus</a></li>
+    <li><strong>Help is there if you need it.</strong> Corpus has extra help for schoolwork and people to talk to if things feel like a lot. <a href="<%= school.links.help %>">Academic support</a> <a href="<%= school.links.wellbeing %>">Mental health</a></li>
+  </ul>
+</section>
+
+<section class="worries">
+  <h2>What you're probably worried about</h2>
+  <p class="section-lead">I worried about all of these. Here's where to look.</p>
+  <ul class="worry-list">
+    <li><a href="/tips#tip-8"><strong>Getting lost or being late</strong><span>The school is bigger and you switch classes. You'll know your way by Friday.</span></a></li>
+    <li><a href="/skills"><strong>More homework, harder tests</strong><span>The four skills that saved my first year, with one thing to try this week.</span></a></li>
+    <li><a href="/tips#tip-7"><strong>Making new friends</strong><span>Everyone in Grade 9 is new. Saying hi first is easier than you think.</span></a></li>
+    <li><a href="/goals"><strong>Picking clubs and teams</strong><span>Set a few goals you can actually reach, then tick them off.</span></a></li>
+  </ul>
+</section>
+
+<section class="short-version">
+  <h2>The short version</h2>
+  <p>Get a calendar. Start a homework habit now. Join something. Ask for help early. That's most of it.</p>
+</section>
+<%- include('partials/footer') %>
