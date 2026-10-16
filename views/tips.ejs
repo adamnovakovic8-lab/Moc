@@ -1,0 +1,42 @@
+<%- include('partials/header') %>
+<div class="page-head">
+  <h1>My top 10 tips</h1>
+  <p class="lead">Each locker has one tip inside. Tap one to open it. Start at 1 if you're not sure where to begin.</p>
+  <div class="progress-wrap">
+    <div class="progress" role="progressbar" aria-label="Tips read" aria-valuemin="0" aria-valuemax="<%= tips.length %>" aria-valuenow="0">
+      <div class="progress-fill"></div>
+    </div>
+    <p class="progress-text" aria-live="polite"><span id="read-count">0</span> of <%= tips.length %> lockers opened</p>
+  </div>
+</div>
+
+<ol class="locker-bank">
+  <% tips.forEach((tip, i) => { %>
+    <li id="tip-<%= i + 1 %>">
+      <button class="locker" data-tip="<%= i %>" aria-haspopup="dialog">
+        <span class="locker-inside"></span>
+        <span class="locker-door">
+          <span class="locker-num"><%= i + 1 %></span>
+          <span class="locker-title"><%= tip.title %></span>
+        </span>
+      </button>
+    </li>
+  <% }) %>
+</ol>
+
+<dialog class="tip-dialog" id="tip-dialog" aria-labelledby="tip-dialog-title">
+  <% tips.forEach((tip, i) => { %>
+    <template data-tip="<%= i %>">
+      <p class="tip-number">Tip <%= i + 1 %> of <%= tips.length %></p>
+      <h2 id="tip-dialog-title"><%= tip.title %></h2>
+      <p><%= tip.body %></p>
+      <p class="why"><strong>Why it matters:</strong> <%= tip.why %></p>
+    </template>
+  <% }) %>
+  <div class="dialog-body"></div>
+  <div class="dialog-actions">
+    <button class="btn btn-quiet" id="tip-close">Close</button>
+    <button class="btn" id="tip-next">Next tip</button>
+  </div>
+</dialog>
+<%- include('partials/footer') %>
