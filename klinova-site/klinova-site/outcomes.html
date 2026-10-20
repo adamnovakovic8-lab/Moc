@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Outcomes — KLINOVA</title>
+  <meta name="description" content="Representative Klinova outcomes and the security specification behind them — encryption, RBAC, MFA, audit logging and PIPEDA-ready architecture." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2306060d'/%3E%3Cg fill='none' stroke='%2322e0ff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 22 L13 32 L20 42'/%3E%3Cpath d='M30 18 V46'/%3E%3Cpath d='M30 32 L44 18'/%3E%3Cpath d='M30 32 L46 47'/%3E%3Cpath d='M52 22 L59 32 L52 42'/%3E%3C/g%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="outcomes">
+  <div class="pagefade" id="pagefade" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" id="cursor" aria-hidden="true"><span></span></div>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <header class="nav" id="nav">
+    <a href="index.html" class="brand" data-hover aria-label="Klinova home">
+      <svg class="brand-mark" viewBox="0 0 66 64" aria-hidden="true"><g fill="none" stroke="url(#gN)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 22 L13 32 L20 42" /><path d="M30 18 V46" /><path d="M30 32 L44 18" /><path d="M30 32 L46 47" /><path d="M52 22 L59 32 L52 42" /></g><defs><linearGradient id="gN" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22e0ff" /><stop offset=".5" stop-color="#5b46ff" /><stop offset="1" stop-color="#b23bff" /></linearGradient></defs></svg>
+      <span>KLINOVA</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="solutions.html" data-nav="solutions" data-hover>Solutions</a>
+      <a href="industries.html" data-nav="industries" data-hover>Industries</a>
+      <a href="process.html" data-nav="process" data-hover>Process</a>
+      <a href="outcomes.html" data-nav="outcomes" data-hover>Outcomes</a>
+    </nav>
+    <div class="nav-right">
+      <a href="contact.html" class="btn" data-hover data-magnetic>Let's build</a>
+      <button class="burger" id="burger" data-hover aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
+    </div>
+  </header>
+  <nav class="menu" id="menu" aria-hidden="true">
+    <ol class="menu-links">
+      <li><a href="index.html" data-hover><em>01</em>Home</a></li>
+      <li><a href="solutions.html" data-hover><em>02</em>Solutions</a></li>
+      <li><a href="industries.html" data-hover><em>03</em>Industries</a></li>
+      <li><a href="process.html" data-hover><em>04</em>Process</a></li>
+      <li><a href="outcomes.html" data-hover><em>05</em>Outcomes</a></li>
+      <li><a href="contact.html" data-hover><em>06</em>Contact</a></li>
+    </ol>
+    <div class="menu-meta"><span>TORONTO · MONTRÉAL · VANCOUVER</span><a href="mailto:hello@klinova.ca" data-hover>hello@klinova.ca</a></div>
+  </nav>
+
+  <main>
+    <section class="pagehero" data-anim="plasma" data-anim-hue="0.78" data-theme="dark">
+      <canvas class="sec-canvas" aria-hidden="true"></canvas>
+      <div class="sec-scrim"></div>
+      <div class="sec-inner">
+        <div class="crumbs"><a href="index.html" data-hover>HOME</a><span>/</span> OUTCOMES · // 05</div>
+        <h1 data-split>Proof,<br /><em>not promises.</em></h1>
+        <p class="intro" data-reveal>Representative engagements — full case studies available on request. And behind every number, the same security specification, built in from the first commit.</p>
+      </div>
+      <div class="anim-badge" aria-hidden="true">ANIM · PLASMA</div>
+    </section>
+
+    <section class="pagebody pagebody--dark" data-theme="dark">
+      <div class="sec-inner">
+        <div class="tele-grid">
+          <div class="tele" data-reveal><strong data-count="-32" data-suffix="%">-32%</strong><span>Admin time per patient visit — Klinova EMR across a 40-clinic network, replacing three legacy systems.</span></div>
+          <div class="tele" data-reveal><strong data-count="200" data-suffix="k+">200k+</strong><span>Rx deliveries per year across three provinces with zero chain-of-custody gaps.</span></div>
+          <div class="tele" data-reveal><strong>5&rarr;1</strong><span>Portfolio systems consolidated into one audit-ready platform for an independent investment firm.</span></div>
+        </div>
+        <div class="tele-strip" data-reveal><span>SSL/HTTPS</span><span>ENCRYPTION AT REST</span><span>RBAC</span><span>MFA</span><span>AUDIT LOGGING</span><span>BACKUPS</span><span>PIPEDA-READY</span><span>CANADIAN RESIDENCY</span></div>
+      </div>
+    </section>
+
+    <nav class="subnav">
+      <a href="process.html" data-hover><span class="sn-k">◂ PREV</span><span class="sn-t">Process</span></a>
+      <a href="contact.html" class="sn-next" data-hover><span class="sn-k">NEXT ▸</span><span class="sn-t">Contact</span></a>
+    </nav>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-word" aria-hidden="true">KLINOVA</div>
+    <div class="footer-row"><span>© <span id="year">2026</span> KLINOVA INC. — BUILT IN CANADA 🍁</span><span>BUILDING SOLUTIONS, EMPOWERING BUSINESSES.</span><span>WCAG AA · LIGHTHOUSE 95+</span></div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="anim.js" defer></script>
+  <script src="main.js" defer></script>
+</body>
+</html>
