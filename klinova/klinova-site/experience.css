@@ -1,0 +1,105 @@
+/* ============================================================
+   KLINOVA — experience.css
+   Immersive homepage: WebGL canvas, monitor-dive flash,
+   scroll-driven industry HUD. Loaded on index.html + industry.html.
+   ============================================================ */
+:root { --xa: #22e0ff; --xb: #5b46ff; }
+
+/* scroll lock during the intro cinematic */
+html.xp-lock, html.xp-lock body { overflow: hidden !important; height: 100%; touch-action: none; }
+
+/* fixed WebGL stage */
+#xpCanvas { position: fixed; inset: 0; width: 100vw; height: 100svh; z-index: 0; display: block; pointer-events: none; will-change: opacity; }
+#xpFlash { position: fixed; inset: 0; z-index: 590; background: #fff; opacity: 0; pointer-events: none; }
+
+/* scroll driver — empty, transparent; provides journey length */
+#xpStage { position: relative; z-index: 1; width: 100%; height: calc(8 * 100svh); pointer-events: none; }
+
+/* the regular site sits above the fixed canvas and covers it on exit */
+#site { position: relative; z-index: 5; background: var(--bg); }
+.footer { position: relative; z-index: 5; }
+
+/* ---------- HUD ---------- */
+#xpHud { position: fixed; inset: 0; z-index: 60; pointer-events: none; opacity: 0; transition: opacity 1s ease .1s; --xa: #22e0ff; --xb: #5b46ff; }
+body.xp-run #xpHud { opacity: 1; }
+
+.xp-hud-main { position: absolute; left: clamp(1.2rem, 5vw, 4.5rem); bottom: clamp(1.6rem, 7vh, 4rem); max-width: min(46rem, 82vw); }
+.xp-eyebrow { font-family: var(--f-mono); font-size: .72rem; letter-spacing: .24em; color: var(--xa); text-transform: uppercase; margin-bottom: .8rem; opacity: .9; }
+.xp-count { display: flex; align-items: baseline; gap: .5rem; font-family: var(--f-mono); line-height: 1; margin-bottom: .3rem; }
+.xp-count span { font-family: var(--f-disp); font-weight: 900; font-size: clamp(2.4rem, 6vw, 4rem); color: transparent; -webkit-text-stroke: 1.5px var(--xa); }
+.xp-count i { font-style: normal; font-size: .9rem; color: var(--muted); letter-spacing: .1em; }
+.xp-name { font-family: var(--f-disp); font-weight: 900; font-stretch: 115%; text-transform: uppercase; font-size: clamp(3rem, 11vw, 8.5rem); line-height: .9; letter-spacing: -.02em; color: #fff; text-shadow: 0 0 34px color-mix(in srgb, var(--xa) 55%, transparent), 0 2px 30px rgba(0, 0, 0, .6); }
+.xp-tag { font-family: var(--f-body); font-size: clamp(1rem, 2.2vw, 1.4rem); color: var(--xa); margin-top: .7rem; letter-spacing: .01em; }
+.xp-blurb { color: #c3ccea; font-size: 1rem; margin-top: .7rem; max-width: 34rem; text-shadow: 0 2px 16px rgba(4, 4, 12, .8); }
+.xp-more { pointer-events: auto; display: inline-flex; align-items: center; gap: .7rem; margin-top: 1.5rem; padding: .85rem 1.5rem; font-family: var(--f-mono); font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; color: #eaf4ff; border: 1px solid color-mix(in srgb, var(--xa) 55%, transparent); border-radius: 3px; background: color-mix(in srgb, var(--xa) 10%, transparent); position: relative; overflow: hidden; transition: color .3s, background .3s, box-shadow .3s; }
+.xp-more i { width: 20px; height: 1px; background: currentColor; position: relative; transition: width .3s; }
+.xp-more i::after { content: ""; position: absolute; right: 0; top: -3px; width: 6px; height: 6px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(-45deg); }
+.xp-more:hover { color: #001018; background: var(--xa); box-shadow: 0 0 28px color-mix(in srgb, var(--xa) 60%, transparent); }
+.xp-more:hover i { width: 28px; }
+
+/* animated swap of HUD text on sector change */
+body.xp-run #xpHud.swap .xp-eyebrow, body.xp-run #xpHud.swap .xp-count,
+body.xp-run #xpHud.swap .xp-name, body.xp-run #xpHud.swap .xp-tag, body.xp-run #xpHud.swap .xp-blurb { animation: xpSwap .55s cubic-bezier(.22, 1, .36, 1) both; }
+.xp-count { animation-delay: .04s; } .xp-name { animation-delay: .07s; } .xp-tag { animation-delay: .1s; } .xp-blurb { animation-delay: .13s; }
+@keyframes xpSwap { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+/* sector rail (right) */
+.xp-rail { position: absolute; right: clamp(1rem, 3vw, 2.4rem); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: .55rem; pointer-events: auto; }
+.xp-rail li { display: flex; align-items: center; gap: .7rem; justify-content: flex-end; cursor: pointer; opacity: .4; transition: opacity .3s; font-family: var(--f-mono); }
+.xp-rail li b { font-size: .68rem; color: var(--muted); font-weight: 500; }
+.xp-rail li span { font-size: .74rem; letter-spacing: .04em; color: #cdd6f2; text-transform: uppercase; width: 0; overflow: hidden; white-space: nowrap; transition: width .35s, opacity .35s; opacity: 0; text-align: right; }
+.xp-rail li::after { content: ""; width: 26px; height: 2px; background: #4a5578; border-radius: 2px; transition: width .35s, background .35s, box-shadow .35s; }
+.xp-rail li:hover { opacity: .85; }
+.xp-rail li.on { opacity: 1; }
+.xp-rail li.on span { width: 7rem; opacity: 1; }
+.xp-rail li.on::after { width: 46px; background: var(--xa); box-shadow: 0 0 12px var(--xa); }
+
+/* scroll hint */
+.xp-hint { position: absolute; left: 50%; bottom: 1.6rem; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: .5rem; font-family: var(--f-mono); font-size: .64rem; letter-spacing: .3em; color: var(--muted); transition: opacity .5s; }
+.xp-hint.gone { opacity: 0; }
+.xp-hint i { width: 1px; height: 30px; background: linear-gradient(var(--xa), transparent); animation: xpcue 1.8s ease-in-out infinite; }
+@keyframes xpcue { 0% { transform: scaleY(0); transform-origin: top; } 55% { transform: scaleY(1); transform-origin: top; } 56% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+/* skip button */
+#xpSkip { position: fixed; top: clamp(.8rem, 2vw, 1.3rem); right: clamp(1rem, 4vw, 3rem); z-index: 62; pointer-events: auto; display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1.1rem; font-family: var(--f-mono); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: #cdd6f2; background: rgba(8, 10, 22, .5); border: 1px solid rgba(120, 170, 255, .25); border-radius: 3px; backdrop-filter: blur(6px); transition: color .3s, border-color .3s, background .3s; }
+#xpSkip:hover { color: #fff; border-color: var(--xa); background: rgba(34, 224, 255, .12); }
+#xpSkip i { font-style: normal; transition: transform .3s; }
+#xpSkip:hover i { transform: translateX(4px); }
+body.xp-run #xpSkip { top: auto; bottom: clamp(1.6rem, 7vh, 4rem); }
+
+/* hide chrome during the intro dive; reveal nav after */
+body.xp-intro .nav, body.xp-intro .menu { opacity: 0; pointer-events: none; }
+.nav { transition: background .5s, border-color .5s, color .5s, opacity .6s; }
+
+/* fallback: if WebGL/deps fail, hide the experience and show the plain site */
+html.xp-off #xpCanvas, html.xp-off #xpFlash, html.xp-off #xpStage, html.xp-off #xpHud, html.xp-off #xpSkip { display: none !important; }
+
+/* ---------- per-industry detail page (industry.html) ---------- */
+.ind-hero { min-height: 92svh; position: relative; overflow: hidden; }
+.ind-hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; }
+.ind-hero .sec-scrim { z-index: 1; }
+.ind-hero .sec-inner { position: relative; z-index: 2; }
+.ind-hero h1 { font-size: clamp(3rem, 11vw, 8rem); letter-spacing: -.02em; color: #fff; text-shadow: 0 0 38px color-mix(in srgb, var(--xa) 55%, transparent), 0 2px 30px rgba(0, 0, 0, .6); }
+.ind-tagline { font-family: var(--f-body); font-size: clamp(1.1rem, 2.4vw, 1.55rem); color: var(--xa); margin-top: .8rem; letter-spacing: .01em; }
+.ind-hero .intro { color: #c3ccea; }
+.ind-cta { display: flex; gap: 1rem; margin-top: 2.2rem; flex-wrap: wrap; }
+.ind-cta .btn-lg { margin-top: 0; }
+.ind-help { margin-top: 1.6rem; }
+.ind-help .step { border-top-color: color-mix(in srgb, var(--xa) 40%, var(--line)); }
+.ind-help .step > span { color: var(--xa); }
+.ind-meta { display: flex; flex-wrap: wrap; gap: 2.4rem; align-items: center; justify-content: space-between; margin-top: 3.2rem; border-top: 1px solid var(--line); padding-top: 2.2rem; }
+.ind-stat strong { font-family: var(--f-disp); font-weight: 900; font-size: clamp(3rem, 7vw, 5rem); color: transparent; -webkit-text-stroke: 1.6px var(--xa); line-height: 1; display: block; }
+.ind-stat span { font-family: var(--f-mono); font-size: .78rem; color: var(--muted); letter-spacing: .06em; }
+.ind-plat-lead { font-family: var(--f-mono); font-size: .72rem; letter-spacing: .16em; color: var(--muted); margin-bottom: .8rem; }
+.ind-plat .tele-strip span { border-color: color-mix(in srgb, var(--xa) 40%, var(--line)); }
+body[data-page="industries"] .nav a[data-nav="industries"] { color: var(--xa); background: color-mix(in srgb, var(--xa) 12%, transparent); }
+
+@media (max-width: 820px) {
+  .xp-rail { display: none; }
+  .xp-blurb { display: none; }
+  .xp-name { font-size: clamp(2.6rem, 15vw, 5rem); }
+  .ind-meta { flex-direction: column; align-items: flex-start; gap: 1.4rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .xp-hint i { animation: none; }
+}
