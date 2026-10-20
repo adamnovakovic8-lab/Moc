@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>document.documentElement.className += ' js';</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Locations — mdot.blends | Woodbridge &amp; Sherkston Shores</title>
+  <meta name="description" content="Catch mdot.blends in Woodbridge year-round and Sherkston Shores through the summer season." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Shade&family=Barlow+Condensed:wght@500;600;700;800;900&family=Rubik+Spray+Paint&family=Permanent+Marker&display=swap" rel="stylesheet" />
+  <link rel="icon" href="media/logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="inner">
+  <div class="curtain" id="curtain" aria-hidden="true"><div class="curtain__center"><img class="curtain__logo" src="media/logo.png" alt="mdot.blends" /><span class="curtain__bar"></span></div></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ===== NAV ===== -->
+  <header class="nav" id="nav">
+    <div class="nav__inner container">
+      <a href="index.html" class="brand">
+        <img class="brand__logo" src="media/logo.png" alt="mdot.blends barber" />
+      </a>
+      <nav class="nav__links" id="navLinks">
+        <a href="services.html">Services</a>
+        <a href="locations.html" aria-current="page">Locations</a>
+        <a href="work.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="book.html" class="nav__cta">Book Now</a>
+      </nav>
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <div class="page-hero__bg"></div>
+    <div class="container">
+      <span class="page-hero__eyebrow tag tag--acid">02 — Find the chair</span>
+      <h1 class="page-hero__title reveal">Two Chairs<span class="dot">.</span></h1>
+      <p class="page-hero__lead reveal">Catch me in the city or down by the lake. Days vary — always confirm when you book.</p>
+    </div>
+  </section>
+
+  <!-- ===== LOCATIONS ===== -->
+  <section class="section section--after-hero locations">
+    <div class="container">
+      <div class="loc-grid">
+        <article class="loc reveal">
+          <div class="loc__map loc__map--woodbridge">
+            <span class="loc__pin">📍</span>
+          </div>
+          <div class="loc__body">
+            <span class="loc__tag tag tag--fill">Home base</span>
+            <h3>Woodbridge</h3>
+            <p class="loc__city">Vaughan, Ontario</p>
+            <p>Private studio setup in the heart of Woodbridge. Year-round bookings, evenings &amp; weekends available.</p>
+            <ul class="loc__meta">
+              <li><strong>Days</strong><span>Tue – Sun</span></li>
+              <li><strong>Hours</strong><span>10am – 8pm</span></li>
+            </ul>
+            <a href="book.html" class="btn btn--small">Book Woodbridge</a>
+          </div>
+        </article>
+
+        <article class="loc reveal">
+          <div class="loc__map loc__map--sherkston">
+            <span class="loc__pin">📍</span>
+          </div>
+          <div class="loc__body">
+            <span class="loc__tag tag tag--acid">Summer season</span>
+            <h3>Sherkston Shores</h3>
+            <p class="loc__city">Port Colborne, Ontario</p>
+            <p>Cutting lakeside through the summer for the Sherkston community &amp; cottagers. Limited dates — book early.</p>
+            <ul class="loc__meta">
+              <li><strong>Season</strong><span>May – Sept</span></li>
+              <li><strong>Days</strong><span>Weekends</span></li>
+            </ul>
+            <a href="book.html" class="btn btn--small">Book Sherkston</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="page-cta reveal">
+        <h2>Not sure which chair?</h2>
+        <a href="book.html" class="btn btn--primary">Book &amp; I'll Sort It Out</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a href="index.html" class="brand brand--footer">
+        <img class="brand__logo" src="media/logo.png" alt="mdot.blends barber" />
+      </a>
+      <p class="footer__tag">Sharp cuts &amp; clean blends · Woodbridge &amp; Sherkston Shores, ON</p>
+      <div class="footer__social">
+        <a href="https://instagram.com/mdot.blends" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://tiktok.com/@mdot.blends" target="_blank" rel="noopener">TikTok</a>
+        <a href="book.html">Book</a>
+      </div>
+      <p class="footer__copy">© <span id="year"></span> mdot.blends. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <a href="book.html" class="fab" aria-label="Book now">Book ✂</a>
+
+  <script src="script.js"></script>
+</body>
+</html>
