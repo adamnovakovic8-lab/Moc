@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery · Belle Côte Days Festival</title>
+  <meta name="description" content="Live from Instagram — the newest moments from the Belle Côte Days Festival, updated automatically." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="Belle Côte Festival home">
+        <span class="brand__mark" aria-hidden="true"><svg class="wavemark" viewBox="0 0 72 44" fill="none" xmlns="http://www.w3.org/2000/svg" stroke-linecap="round"><path d="M8 25C20 7 40 6 54 13c7 3 12 3 15 1" stroke="#3F8A3C" stroke-width="3.3"/><path d="M7 29C19 12 41 11 55 17c7 3 11 3 14 1" stroke="#9FBF3B" stroke-width="2.6"/><path d="M6 32.5C19 17 40 16 56 21c6 2 10 2 13 1" stroke="#2E8BCB" stroke-width="3.1"/><path d="M6 36C18 23 40 22 56 27c6 2 10 2 13 1" stroke="#1F3A63" stroke-width="3.6"/><path d="M9 39C19 30 38 29 52 32" stroke="#6FAFB2" stroke-width="2.7"/><path d="M12 41.5C20 35 33 34 45 36" stroke="#D8A05B" stroke-width="2.5"/><path d="M22 41C9 41 4 31 12 27c5-3 11 1 7 6" stroke="#C8A885" stroke-width="2.3"/><path d="M25 43C10 44 2 33 11 27.5" stroke="#cdd6da" stroke-width="1.7"/></svg></span>
+        <span class="brand__name"><b>Belle Côte</b><span>Days Festival</span></span>
+      </a>
+      <nav id="nav-links" class="nav__links" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="events.html">Schedule</a>
+        <a href="story.html">Our Story</a>
+        <a href="gallery.html" aria-current="page">Gallery</a>
+        <a href="visit.html">Visit</a>
+      </nav>
+      <div class="nav__cta">
+        <a class="btn btn--sand" href="visit.html#subscribe">Get Updates</a>
+        <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero" style="--photo:url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1900&q=80')">
+      <div class="container">
+        <div class="breadcrumbs"><a href="index.html">Home</a> <span>/</span> <span>Gallery</span></div>
+        <span class="eyebrow">Straight from the feed</span>
+        <h1>Live from Instagram</h1>
+        <p>This gallery pulls the festival's newest posts automatically — every time someone shares a moment on Instagram, it shows up right here. No refresh needed.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="ig-head" data-reveal>
+          <div class="section-head" style="margin-bottom:0">
+            <span class="eyebrow">@<span data-ig-handle-text>bellecotedays</span></span>
+            <h2>Festival moments</h2>
+            <p>Tag <strong data-ig-handle>@bellecotedays</strong> and use <strong>#BelleCoteDays</strong> to be featured.</p>
+          </div>
+          <a class="ig-follow" href="#" data-ig-link target="_blank" rel="noopener">
+            Follow us
+            <span class="ig-follow__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span>
+          </a>
+        </div>
+
+        <!-- AUTO-UPDATING FEED: filled by js/instagram.js -->
+        <div class="ig-grid" data-ig-feed data-limit="12" data-reveal style="margin-top:36px"></div>
+        <p class="ig-status"></p>
+
+        <div style="text-align:center;margin-top:34px">
+          <a class="btn btn--ghost" href="#" data-ig-link target="_blank" rel="noopener">See more on Instagram →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--seafoam">
+      <div class="container" style="max-width:760px;text-align:center">
+        <div data-reveal>
+          <span class="eyebrow center">How it works</span>
+          <h2>Always up to date, on its own</h2>
+          <p style="margin-top:14px">The gallery is connected to our official Instagram account. As soon as a new post goes live, it's detected and added here automatically — so the website always shows the latest from the shore.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a class="brand" href="index.html"><span class="brand__mark" aria-hidden="true"><svg class="wavemark" viewBox="0 0 72 44" fill="none" xmlns="http://www.w3.org/2000/svg" stroke-linecap="round"><path d="M8 25C20 7 40 6 54 13c7 3 12 3 15 1" stroke="#3F8A3C" stroke-width="3.3"/><path d="M7 29C19 12 41 11 55 17c7 3 11 3 14 1" stroke="#9FBF3B" stroke-width="2.6"/><path d="M6 32.5C19 17 40 16 56 21c6 2 10 2 13 1" stroke="#2E8BCB" stroke-width="3.1"/><path d="M6 36C18 23 40 22 56 27c6 2 10 2 13 1" stroke="#1F3A63" stroke-width="3.6"/><path d="M9 39C19 30 38 29 52 32" stroke="#6FAFB2" stroke-width="2.7"/><path d="M12 41.5C20 35 33 34 45 36" stroke="#D8A05B" stroke-width="2.5"/><path d="M22 41C9 41 4 31 12 27c5-3 11 1 7 6" stroke="#C8A885" stroke-width="2.3"/><path d="M25 43C10 44 2 33 11 27.5" stroke="#cdd6da" stroke-width="1.7"/></svg></span><span class="brand__name"><b>Belle Côte</b><span>Days Festival</span></span></a>
+          <p>Five days of fun by the sea. July 22–26 in Belle Côte, Cape Breton. Community &amp; visitors welcome.</p>
+          <div class="socials">
+            <a href="#" data-ig-link target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0022 12z"/></svg></a>
+            <a href="#" aria-label="Email" data-email-link><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-col"><h4>Explore</h4><a href="index.html">Home</a><a href="events.html">Schedule</a><a href="story.html">Our Story</a><a href="gallery.html">Gallery</a><a href="visit.html">Visit</a></div>
+        <div class="footer-col"><h4>Visit</h4><a href="visit.html#getting-here">Getting here</a><a href="visit.html#stay">Where to stay</a><a href="visit.html#faq">FAQ</a><a href="visit.html#subscribe">Get updates</a></div>
+        <div class="footer-col"><h4>Contact</h4><a href="#" data-email-link>hello@bellecotedays.ca</a><a href="#" data-ig-link target="_blank" rel="noopener" data-ig-handle>@bellecotedays</a><a href="visit.html#volunteer">Volunteer with us</a></div>
+      </div>
+      <div class="footer-bottom"><span>© <span data-year>2026</span> Belle Côte Days Festival. Made with 🌊 by volunteers.</span><span>Belle Côte · Inverness County · Nova Scotia</span></div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/instagram.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
