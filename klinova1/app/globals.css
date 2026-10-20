@@ -1,0 +1,362 @@
+/* ============================================================
+   KLINOVA — design system
+   Ground rules, held everywhere:
+   · No rounded cards. Corners are square or chamfered.
+   · No pill buttons. No glassmorphism. No gradient text.
+   · No glowing blobs. The only "glow" is paper under a lamp.
+   · Colour never carries meaning alone.
+   The site is drawn as a set of engineering sheets: hairline
+   rules, tick marks, monospace annotations, chamfered blocks.
+   ============================================================ */
+
+:root {
+  /* Ground — warm drafting paper, deliberately not white */
+  --paper: #ece6da;
+  --paper-lift: #f4f0e7;
+  --paper-sink: #e0d9c9;
+
+  /* Ink — warm near-black, never pure #000 */
+  --ink: #12120f;
+  --ink-2: #1c1c18;
+  --ink-soft: #3a382f;
+  --muted: #6c6658;
+
+  --line: rgba(18, 18, 15, 0.16);
+  --line-2: rgba(18, 18, 15, 0.34);
+  --line-3: rgba(18, 18, 15, 0.08);
+
+  /* Klinova's own accent. Platforms borrow their own hues. */
+  --coral: #ff5a2b;
+  --accent: var(--coral);
+  --on-accent: #ffffff;
+
+  --gutter: clamp(1.15rem, 4vw, 4.5rem);
+  --rail-h: 2.15rem;
+  --head-h: 4.4rem;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-io: cubic-bezier(0.76, 0, 0.24, 1);
+
+  color-scheme: light;
+}
+
+/* Dark sheets invert the ground rather than recolouring it. */
+.sheet-dark {
+  --paper: #12120f;
+  --paper-lift: #1c1c18;
+  --paper-sink: #0b0b09;
+  --ink: #ece6da;
+  --ink-2: #ddd6c6;
+  --ink-soft: #b8b1a1;
+  --muted: #8b8577;
+  --line: rgba(236, 230, 218, 0.18);
+  --line-2: rgba(236, 230, 218, 0.36);
+  --line-3: rgba(236, 230, 218, 0.09);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), "Archivo", system-ui, -apple-system, sans-serif;
+  font-size: clamp(0.97rem, 0.94rem + 0.16vw, 1.04rem);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  /* Room for the fixed title block and the instrument rail. */
+  padding-top: var(--head-h);
+  padding-bottom: var(--rail-h);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Paper grain — keeps large flat areas from reading as flat vector.
+   Fine, monochrome, and completely inert. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E");
+}
+
+/* ---------- typography ---------- */
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.display {
+  font-size: clamp(3rem, 12vw, 13rem);
+  font-weight: 800;
+  line-height: 0.84;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+}
+
+.display-sm {
+  font-size: clamp(2rem, 5.2vw, 4rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+.lede {
+  font-size: clamp(1.08rem, 0.96rem + 0.6vw, 1.4rem);
+  line-height: 1.45;
+  color: var(--ink-soft);
+  letter-spacing: -0.012em;
+  max-width: 42ch;
+}
+
+.body {
+  color: var(--ink-soft);
+  max-width: 46ch;
+}
+
+/* Monospace is the annotation layer — it labels, it never shouts. */
+.mono {
+  font-family: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
+  font-size: 0.71rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.mono-sm {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.is-accent {
+  color: var(--accent);
+}
+
+/* ---------- the sheet ---------- */
+
+.sheet {
+  position: relative;
+  background: var(--paper);
+  color: var(--ink);
+  padding-inline: var(--gutter);
+}
+
+.sheet-body {
+  padding-block: clamp(2.5rem, 6vh, 4rem) clamp(4rem, 10vh, 7rem);
+}
+
+/* The recurring device: a hairline with a tick and a coordinate. */
+.rule {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding-block: 0.7rem;
+  border-top: 1px solid var(--line);
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+}
+
+.rule::before {
+  content: "";
+  width: 1px;
+  height: 0.55rem;
+  margin-top: -1.25rem;
+  background: var(--line-2);
+  flex: none;
+}
+
+.rule > .mono {
+  white-space: nowrap;
+}
+
+.rule-fill {
+  flex: 1;
+  height: 1px;
+  background: var(--line-3);
+}
+
+/* ---------- interactive ---------- */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:where(a, button, input, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 500;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.85rem 1.2rem;
+  font-weight: 600;
+}
+
+.skip:focus {
+  left: 0.75rem;
+  top: 0.75rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The one button shape on the site: a chamfered slab with a moving edge. */
+.slab {
+  --slab-bg: var(--ink);
+  --slab-fg: var(--paper);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.95rem 1.4rem;
+  background: var(--slab-bg);
+  color: var(--slab-fg);
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: -0.01em;
+  border: none;
+  cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+  transition: background 0.35s var(--ease), color 0.35s var(--ease);
+  font-family: inherit;
+}
+
+.slab::after {
+  content: "";
+  width: 1.4rem;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.4s var(--ease);
+}
+
+.slab:hover::after,
+.slab:focus-visible::after {
+  width: 2.3rem;
+}
+
+.slab:hover {
+  --slab-bg: var(--accent);
+  --slab-fg: var(--on-accent);
+}
+
+/* Underline that draws rather than appears. */
+.draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.45s var(--ease);
+}
+
+.draw:hover,
+.draw:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* A correction, left visible rather than tidied away. */
+s {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--accent);
+  color: var(--muted);
+}
+
+/* ---------- reveal ---------- */
+
+.reveal-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+
+.reveal-ready [data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+}
+
+.wipe span {
+  display: block;
+  overflow: hidden;
+}
+
+.reveal-ready .wipe span > span {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 1.05s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+
+.reveal-ready .wipe[data-reveal="in"] span > span {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  .wipe span > span {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}

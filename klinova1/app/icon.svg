@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Warm paper tile so the mark reads the way it does on the site. -->
+  <rect width="64" height="64" fill="#ece6da"/>
+  <!-- Same geometry as components/brand/klinova.tsx, scaled to the tile. -->
+  <svg x="7" y="12" width="50" height="40" viewBox="0 0 116 100">
+    <rect x="0" y="0" width="27" height="100" fill="#12120f"/>
+    <rect x="31" y="0" width="29" height="29" fill="#ff4d1c"/>
+    <path d="M31 57 L31 100 L74 100 Z" fill="#ff4d1c"/>
+    <path d="M160 -58 L35 50 L160 158" fill="none" stroke="#12120f" stroke-width="32"/>
+  </svg>
+</svg>
