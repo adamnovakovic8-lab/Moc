@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> | Welcome to High School</title>
+  <meta name="description" content="Advice for Grade 8 students coming to Corpus Christi, from someone who just finished Grade 9.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="/css/style.css">
+  <script>
+    try { if (localStorage.theme) document.documentElement.dataset.theme = localStorage.theme; } catch (e) {}
+    // The bell intro plays on the first page of a visit and on every reload; storage blocked means skip it rather than replay on every page
+    try { if (sessionStorage.introSeen && performance.getEntriesByType('navigation')[0]?.type !== 'reload') throw 0; sessionStorage.introSeen = '1'; } catch (e) { document.documentElement.classList.add('no-intro'); }
+  </script>
+</head>
+<body>
+<div class="intro" aria-hidden="true">
+  <svg class="bell" viewBox="0 0 200 200">
+    <g class="waves waves-l"><path d="M42 70 Q30 92 42 114"/><path d="M26 60 Q10 92 26 124"/><path d="M10 50 Q-10 92 10 134"/></g>
+    <g class="waves waves-r"><path d="M158 70 Q170 92 158 114"/><path d="M174 60 Q190 92 174 124"/><path d="M190 50 Q210 92 190 134"/></g>
+    <g class="gong">
+      <defs><radialGradient id="dome" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#ff9a45"/><stop offset=".55" stop-color="#d06400"/><stop offset="1" stop-color="#8a3d00"/></radialGradient></defs>
+      <circle cx="100" cy="92" r="54" fill="url(#dome)" stroke="#6e3000" stroke-width="3"/>
+      <circle cx="100" cy="92" r="36" fill="none" stroke="#ffb06b" stroke-width="2" opacity=".55"/>
+      <path d="M68 70 A38 38 0 0 1 108 55" fill="none" stroke="#ffd2a8" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+      <circle cx="100" cy="92" r="8" fill="#3a332d" stroke="#1d1a17" stroke-width="2"/>
+    </g>
+    <g class="striker"><rect x="96" y="150" width="8" height="18" rx="3" fill="#cfc6be"/><circle cx="100" cy="152" r="9" fill="#f4f1ee"/></g>
+    <rect x="72" y="162" width="56" height="24" rx="6" fill="#4a423b"/><rect x="80" y="170" width="40" height="3" rx="1.5" fill="#2a2420"/>
+    <rect x="88" y="186" width="24" height="7" rx="2" fill="#2a2420"/>
+  </svg>
+  <p class="intro-text">First bell, 8:20 a.m.</p>
+</div>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="logo" href="/" aria-label="Welcome to High School home">
+      <img src="/images/corpus-logo.png" alt="Corpus Christi Catholic Secondary School" width="837" height="200">
+      <span class="site-name">Welcome to<br>High School</span>
+    </a>
+    <nav id="nav" aria-label="Main">
+      <% nav.forEach(([href, , label]) => { %>
+        <a href="<%= href %>" <%- href === path ? 'aria-current="page"' : '' %>><%= label %></a>
+      <% }) %>
+    </nav>
+    <button class="round-btn" id="theme" aria-label="Switch to dark mode">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+    </button>
+    <button class="round-btn menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v2.5H4zM4 11h16v2.5H4zM4 16h16v2.5H4z"/></svg></button>
+  </div>
+</header>
+<main id="main">

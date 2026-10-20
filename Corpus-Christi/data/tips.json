@@ -1,0 +1,27 @@
+{
+  "tips": [
+    { "title": "Start the homework habit now", "body": "Don't wait for September. Even 20 minutes a night in Grade 8 makes Grade 9 way easier.", "why": "A habit you already have is one less new thing to learn when everything else is new." },
+    { "title": "Get a calendar and actually use it", "body": "Put tests, practices, and due dates in it. Once it's all written down, your head feels a lot lighter.", "why": "Tests and assignments love to land in the same week. A calendar shows you that before it happens." },
+    { "title": "Write your goals down", "body": "A goal in a journal is way harder to forget than one in your head. Keep it somewhere you'll see it.", "why": "Writing it down turns a wish into a plan you can check on." },
+    { "title": "Don't leave things to the last night", "body": "Big assignments sneak up on you. Break them into small pieces and do one piece at a time.", "why": "Small pieces feel easy. One giant all-nighter feels terrible and usually shows in your mark." },
+    { "title": "Talk to your teachers", "body": "If you're confused, ask. They'd rather help you early than see you fail a test.", "why": "Teachers can't help with a problem they don't know about." },
+    { "title": "Join a team or a club", "body": "It's the fastest way to make friends in a new school. You already have something in common.", "why": "Clubs and teams give you a group before you even know your way around." },
+    { "title": "Be social, even if it's awkward", "body": "Everyone is new in Grade 9. Say hi to the person beside you.", "why": "Most people are just as nervous as you and are happy someone talked first." },
+    { "title": "Keep your binder and backpack organized", "body": "Losing a handout the day before it's due is the worst. One folder per class fixes most of it.", "why": "Less time looking for stuff means more time actually getting it done." },
+    { "title": "Find a study spot that works", "body": "Somewhere quiet, with your phone in another room. Use the same spot every time.", "why": "Your brain learns that this spot means focus time." },
+    { "title": "Balance school and your life", "body": "Grades matter, but so do friends, sports, and sleep. Make time for all of them.", "why": "If you burn out in October, the rest of the year is way harder." }
+  ],
+  "goals": [
+    { "id": "grades", "title": "Get good grades", "doable": "Study 30 minutes on school nights and hand everything in on time." },
+    { "id": "friends", "title": "Make new friends", "doable": "Talk to one new person each week in class or at lunch." },
+    { "id": "sport", "title": "Join a school sport", "doable": "Find the try-out dates in the first two weeks and put them in your calendar." },
+    { "id": "club", "title": "Join a school club", "doable": "Go to one club meeting in September, even just to see what it's like." },
+    { "id": "social", "title": "Be social", "doable": "Say hi to the person beside you in every new class on day one." }
+  ],
+  "skills": [
+    { "name": "Time management", "what": "Planning your time so things get done before they're due, not the night of.", "example": "When my first tests all landed in the same two weeks, I started putting every due date in a calendar. It saved me.", "try": "Write down every due date you have this month in one place." },
+    { "name": "Organization", "what": "Keeping your stuff and your work where you can find it.", "example": "I gave each class its own folder. No more digging through my backpack for a handout.", "try": "Clean out your backpack and give each subject its own folder." },
+    { "name": "Communication", "what": "Asking for help and saying what you need, to teachers and friends.", "example": "I was lost in one unit, so I stayed after class and asked. Ten minutes fixed what would have been a bad test.", "try": "Ask a teacher one question you've been too shy to ask." },
+    { "name": "Good study habits", "what": "Studying a little at a time, in a good spot, without distractions.", "example": "Studying 30 minutes a night with my phone in another room worked way better than cramming.", "try": "Study for 20 minutes tonight with your phone in a different room." }
+  ]
+}
