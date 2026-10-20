@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>document.documentElement.className += ' js';</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book an Appointment — mdot.blends</title>
+  <meta name="description" content="Book a cut with mdot.blends in Woodbridge or Sherkston Shores. Send your details or DM to lock in your spot." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Shade&family=Barlow+Condensed:wght@500;600;700;800;900&family=Rubik+Spray+Paint&family=Permanent+Marker&display=swap" rel="stylesheet" />
+  <link rel="icon" href="media/logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="inner">
+  <div class="curtain" id="curtain" aria-hidden="true"><div class="curtain__center"><img class="curtain__logo" src="media/logo.png" alt="mdot.blends" /><span class="curtain__bar"></span></div></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ===== NAV ===== -->
+  <header class="nav" id="nav">
+    <div class="nav__inner container">
+      <a href="index.html" class="brand">
+        <img class="brand__logo" src="media/logo.png" alt="mdot.blends barber" />
+      </a>
+      <nav class="nav__links" id="navLinks">
+        <a href="services.html">Services</a>
+        <a href="locations.html">Locations</a>
+        <a href="work.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="book.html" class="nav__cta" aria-current="page">Book Now</a>
+      </nav>
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <div class="page-hero__bg"></div>
+    <div class="container">
+      <span class="page-hero__eyebrow tag tag--acid">05 — Lock it in</span>
+      <h1 class="page-hero__title reveal">Book it<span class="dot">.</span></h1>
+      <p class="page-hero__lead reveal">Send through your details and I'll confirm your spot. Easiest way is a DM on Instagram.</p>
+    </div>
+  </section>
+
+  <!-- ===== BOOK / CONTACT ===== -->
+  <section class="section section--after-hero book">
+    <div class="container">
+      <div class="book__grid">
+        <form class="book__form reveal" id="bookForm" novalidate>
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required />
+          </div>
+          <div class="field">
+            <label for="phone">Phone / IG handle</label>
+            <input type="text" id="phone" name="phone" placeholder="So I can confirm with you" required />
+          </div>
+          <div class="field">
+            <label for="location">Location</label>
+            <select id="location" name="location" required>
+              <option value="" disabled selected>Choose a chair</option>
+              <option>Woodbridge</option>
+              <option>Sherkston Shores</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="service">Service</label>
+            <select id="service" name="service" required>
+              <option value="" disabled selected>What are we doing?</option>
+              <option>Signature Cut — $35</option>
+              <option>Cut + Beard — $45</option>
+              <option>Skin Fade — $40</option>
+              <option>Kids Cut — $25</option>
+              <option>Lineup / Edge-Up — $15</option>
+            </select>
+          </div>
+          <div class="field field--full">
+            <label for="notes">Preferred day / notes</label>
+            <textarea id="notes" name="notes" rows="3" placeholder="e.g. Saturday afternoon, skin fade with a design"></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--block">Request Appointment</button>
+          <p class="book__hint" id="formHint" role="status"></p>
+        </form>
+
+        <aside class="book__side reveal">
+          <h3>Or reach out direct</h3>
+          <a class="contact-row" href="https://instagram.com/mdot.blends" target="_blank" rel="noopener">
+            <span class="contact-row__ico">📸</span>
+            <span><strong>@mdot.blends</strong><small>DM for the fastest booking</small></span>
+          </a>
+          <a class="contact-row" href="sms:+10000000000">
+            <span class="contact-row__ico">💬</span>
+            <span><strong>Text to book</strong><small>Add your number here</small></span>
+          </a>
+          <a class="contact-row" href="mailto:hello@mdotblends.com">
+            <span class="contact-row__ico">✉️</span>
+            <span><strong>Email</strong><small>hello@mdotblends.com</small></span>
+          </a>
+          <div class="book__cards">
+            <div><strong>Woodbridge</strong><small>Tue–Sun · 10am–8pm</small></div>
+            <div><strong>Sherkston Shores</strong><small>Summer weekends</small></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a href="index.html" class="brand brand--footer">
+        <img class="brand__logo" src="media/logo.png" alt="mdot.blends barber" />
+      </a>
+      <p class="footer__tag">Sharp cuts &amp; clean blends · Woodbridge &amp; Sherkston Shores, ON</p>
+      <div class="footer__social">
+        <a href="https://instagram.com/mdot.blends" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://tiktok.com/@mdot.blends" target="_blank" rel="noopener">TikTok</a>
+        <a href="book.html">Book</a>
+      </div>
+      <p class="footer__copy">© <span id="year"></span> mdot.blends. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
