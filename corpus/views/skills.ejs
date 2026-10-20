@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+<div class="page-head">
+  <h1>The 4 skills that helped me most</h1>
+  <p class="lead">Think of these like binder dividers, one for each skill. Tap a card to flip it and see what happened to me, plus one thing to try this week.</p>
+</div>
+
+<div class="dividers">
+  <% skills.forEach((skill, i) => { %>
+    <button class="flip tab-<%= i %>" aria-pressed="false">
+      <span class="tab" aria-hidden="true"><%= skill.name %></span>
+      <span class="flip-inner">
+        <span class="face front">
+          <span class="h3"><%= skill.name %></span>
+          <span><%= skill.what %></span>
+          <span class="hint">Tap to flip</span>
+        </span>
+        <span class="face back">
+          <span><strong>In my Grade 9 year:</strong> <%= skill.example %></span>
+          <span class="try"><strong>Try this week:</strong> <%= skill.try %></span>
+          <span class="hint">Tap to flip back</span>
+        </span>
+      </span>
+    </button>
+  <% }) %>
+</div>
+<%- include('partials/footer') %>
