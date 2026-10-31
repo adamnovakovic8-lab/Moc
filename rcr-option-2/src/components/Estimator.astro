@@ -1,0 +1,135 @@
+---
+import site from '../data/site.json';
+import { money } from '../lib/inventory.js';
+
+// F5 — payment estimator. Rate and terms come from site settings so the
+// client can change them; the price is editable unless locked to a cart.
+interface Props {
+  price?: number;
+  lockPrice?: boolean;
+  compact?: boolean;
+}
+const { price = 22000, lockPrice = false, compact = false } = Astro.props;
+const { rate, terms, defaultTerm, defaultDownPercent, disclaimer } = site.financing;
+const down = Math.round((price * defaultDownPercent) / 100 / 100) * 100;
+
+function payment(p: number, d: number, months: number, apr: number) {
+  const principal = Math.max(p - d, 0);
+  const r = apr / 100 / 12;
+  return r === 0 ? principal / months : (principal * r) / (1 - Math.pow(1 + r, -months));
+}
+const initial = payment(price, down, defaultTerm, rate);
+const uid = `est-${Math.random().toString(36).slice(2, 7)}`;
+---
+
+<div class:list={['est', 'dark', compact && 'est--compact']} data-estimator data-rate={rate}>
+  <div class="est__out">
+    <span class="est__label">Estimated payment</span>
+    <output class="est__num" for={`${uid}-price ${uid}-down ${uid}-term`} data-est-out>
+      {money(Math.round(initial))}
+    </output>
+    <span class="est__per">/ month</span>
+  </div>
+  <div class="est__inputs">
+    <div class="field">
+      <label for={`${uid}-price`}>Cart price</label>
+      <input id={`${uid}-price`} type="number" inputmode="numeric" min="1000" step="100" value={price} readonly={lockPrice} data-est="price" />
+    </div>
+    <div class="field">
+      <label for={`${uid}-down`}>Down payment</label>
+      <input id={`${uid}-down`} type="number" inputmode="numeric" min="0" step="100" value={down} data-est="down" />
+    </div>
+    <div class="field">
+      <label for={`${uid}-term`}>Term</label>
+      <select id={`${uid}-term`} data-est="term">
+        {terms.map((t) => <option value={t} selected={t === defaultTerm}>{t} months</option>)}
+      </select>
+    </div>
+    <div class="field">
+      <span class="est__rate-label">Sample rate</span>
+      <span class="est__rate">{rate}% APR</span>
+    </div>
+  </div>
+  <p class="est__fine"><strong>Estimate only.</strong> {disclaimer.replace(/^Estimate only\.\s*/, '')}</p>
+</div>
+
+<script>
+  const fmt = new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 });
+  document.querySelectorAll<HTMLElement>('[data-estimator]').forEach((root) => {
+    const apr = Number(root.dataset.rate);
+    const get = (k: string) => root.querySelector<HTMLInputElement>(`[data-est="${k}"]`)!;
+    const out = root.querySelector('[data-est-out]')!;
+    const calc = () => {
+      const principal = Math.max(Number(get('price').value) - Number(get('down').value), 0);
+      const n = Number(get('term').value);
+      const r = apr / 100 / 12;
+      const pmt = r === 0 ? principal / n : (principal * r) / (1 - Math.pow(1 + r, -n));
+      out.textContent = fmt.format(Math.round(isFinite(pmt) ? pmt : 0));
+    };
+    root.addEventListener('input', calc);
+  });
+</script>
+
+<style>
+  .est {
+    padding: clamp(20px, 3vw, 32px);
+    position: relative;
+    background: var(--purple-900);
+    border-left: 8px solid var(--yellow);
+  }
+  .est .field label,
+  .est__label,
+  .est__rate-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--purple-300);
+  }
+  .est__out {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin-bottom: 22px;
+  }
+  .est__label {
+    width: 100%;
+  }
+  .est__num {
+    font-stretch: 125%;
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(2.8rem, 6vw, 4.4rem);
+    line-height: 0.95;
+    color: var(--yellow);
+    font-variant-numeric: tabular-nums;
+  }
+  .est__per {
+    font-family: var(--mono);
+    color: var(--purple-300);
+  }
+  .est__inputs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .est__rate {
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    font-family: var(--mono);
+    font-weight: 600;
+  }
+  input[readonly] {
+    color: var(--purple-300);
+  }
+  .est__fine {
+    margin: 18px 0 0;
+    font-size: 0.8rem;
+    color: #c9c3d8;
+  }
+  .est--compact .est__num {
+    font-size: clamp(2.4rem, 4.6vw, 3.4rem);
+  }
+</style>

@@ -1,0 +1,125 @@
+---
+import Base from '../layouts/Base.astro';
+import LeadForm from '../components/LeadForm.astro';
+import MapEmbed from '../components/MapEmbed.astro';
+import Hours from '../components/Hours.astro';
+import Icon from '../components/Icon.astro';
+import site from '../data/site.json';
+---
+
+<Base
+  title="Contact & Visit — 10569 Montrose Road, Niagara Falls"
+  description={`Visit RCR Performance Golf Carts at ${site.address.street}, ${site.address.city}. Call ${site.phone} or email ${site.email}.`}
+>
+  <section class="ct dark" aria-labelledby="ct-title">
+    <div class="ct__panel">
+      <h1 id="ct-title">Get in touch</h1>
+      <p class="ct__lead">The quickest way to reach us is a phone call.</p>
+      <a href={site.phoneHref} class="ct__phone" data-track="contact">{site.phone}</a>
+      <a href={`mailto:${site.email}`} class="ct__email" data-track="contact"><Icon name="mail" /> {site.email}</a>
+
+      <div class="ct__cols">
+        <div>
+          <h2 class="ct__h">Address</h2>
+          <address>
+            {site.address.street}<br />{site.address.city}, {site.address.region} {site.address.postal}
+          </address>
+          <a class="text-link" href="https://maps.google.com/?q=10569+Montrose+Road,+Niagara+Falls,+ON" target="_blank" rel="noopener">Get directions</a>
+        </div>
+        <div>
+          <h2 class="ct__h">Hours</h2>
+          <Hours />
+        </div>
+      </div>
+    </div>
+    <div class="ct__map">
+      <MapEmbed />
+    </div>
+  </section>
+
+  <section class="section grain" aria-labelledby="form-title">
+    <div class="wrap ct-form">
+      <div>
+        <h2 id="form-title">Send a message</h2>
+        <p>About a cart, a build, a rental, storage or a repair — anything at all.</p>
+      </div>
+      <LeadForm
+        type="general"
+        fields={[
+          { name: 'about', label: "What's it about?", type: 'radio', options: ['Buying a cart', 'Custom build', 'Rental', 'Storage', 'Service', 'Something else'] },
+          { name: 'message', label: 'Your message', type: 'textarea', required: true },
+        ]}
+      />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ct {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    min-height: 80svh;
+  }
+  .ct__panel {
+    padding: calc(var(--header-h) + 48px) var(--gutter) 56px;
+  }
+  .ct__lead {
+    color: #d6d2c8;
+  }
+  .ct__phone {
+    display: block;
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(2.8rem, 6vw, 4.4rem);
+    line-height: 1;
+    text-decoration: none;
+    color: var(--accent);
+  }
+  .ct__email {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    min-height: 44px;
+    word-break: break-all;
+  }
+  .ct__cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .ct__h {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+  address {
+    font-style: normal;
+    margin-bottom: 12px;
+  }
+  .ct__map :global(.map) {
+    height: 100%;
+    aspect-ratio: auto;
+    min-height: 380px;
+  }
+  .ct-form {
+    display: grid;
+    grid-template-columns: 0.8fr 1.4fr;
+    gap: clamp(28px, 5vw, 72px);
+  }
+  @media (max-width: 900px) {
+    .ct,
+    .ct-form {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 480px) {
+    .ct__cols {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

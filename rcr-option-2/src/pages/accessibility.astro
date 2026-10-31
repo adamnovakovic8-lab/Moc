@@ -1,0 +1,24 @@
+---
+import Legal from '../layouts/Legal.astro';
+import site from '../data/site.json';
+---
+
+<Legal title="Accessibility Statement" description="RCR Performance Golf Carts' commitment to an accessible website." updated="October 2026">
+  <p>We want everyone to be able to shop for, rent, store and service a golf cart with us — online and in person.</p>
+
+  <h2>Our goal</h2>
+  <p>This website aims to meet the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA.</p>
+
+  <h2>What we've done</h2>
+  <ul>
+    <li>Every page can be used with a keyboard alone, with visible focus indicators.</li>
+    <li>All animation respects your device's "reduce motion" setting. The opening animation can be skipped with any key, tap or the "Skip intro" button, and only plays once per visit.</li>
+    <li>Animated and decorative text always has a plain-text equivalent for screen readers.</li>
+    <li>Colour contrast has been checked against our dark backgrounds.</li>
+    <li>Forms have clear labels and tell you when something needs fixing.</li>
+    <li>Our phone number is on every page if you'd rather just talk.</li>
+  </ul>
+
+  <h2>Tell us if something's not working</h2>
+  <p>If you run into a barrier on this site, please let us know at <a href={`mailto:${site.email}`}>{site.email}</a> or call <a href={site.phoneHref}>{site.phone}</a>. We'll fix it, and help you in the meantime.</p>
+</Legal>

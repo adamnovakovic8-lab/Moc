@@ -1,0 +1,149 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Icon from '../components/Icon.astro';
+import site from '../data/site.json';
+import services from '../data/services.json';
+import reviews from '../data/reviews.json';
+import { money } from '../lib/inventory.js';
+
+const { included, price } = services.storage;
+const mk = reviews.find((r) => r.name === 'Matt and Keri')!;
+---
+
+<Base
+  title="Golf Cart Storage in Niagara Falls — Seasonal & Year-Round"
+  description="Seasonal and year-round golf cart storage at RCR Performance in Niagara Falls. Pre-storage inspection, battery charging and maintenance, and easy pickup when you're ready."
+>
+  <PageHero
+    title="Golf cart storage"
+    lede="Somewhere safe for your cart over the off-season — or all year. We check it over going in, keep the battery looked after, and have it ready when you call."
+    photo={{ src: 'shop/yard-white-limo.jpg', alt: 'A white six-seat cart in the RCR yard', r: 1.5 }}
+  >
+    <a href="#form" class="btn" style="margin-top:8px">Save a spot <Icon name="arrow" /></a>
+  </PageHero>
+
+  <section class="section grain" aria-labelledby="incl-title">
+    <div class="wrap incl">
+      <div>
+        <h2 id="incl-title">What you get</h2>
+        <ul class="incl__list">
+          {
+            included.map((it) => (
+              <li>
+                <span class="incl__tick" aria-hidden="true">
+                  <Icon name="check" />
+                </span>
+                <div>
+                  <h3>{it.title}</h3>
+                  <p>{it.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <aside class="incl__side">
+        <p class="incl__price marker">{price ? `${money(price)} / season` : 'Call for this year’s price'}</p>
+        <figure class="incl__quote">
+          <blockquote><p>"{mk.quote}"</p></blockquote>
+          <figcaption>— {mk.name}</figcaption>
+        </figure>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section sform" id="form" aria-labelledby="form-title">
+    <div class="wrap sform__grid">
+      <div>
+        <h2 id="form-title">Save a spot</h2>
+        <p>Tell us about your cart and when you'd like to drop it off. We'll call to confirm.</p>
+        <p>Rather talk? <a href={site.phoneHref} data-track="storage"><strong>{site.phone}</strong></a></p>
+      </div>
+      <LeadForm
+        type="storage"
+        submit="Request storage"
+        fields={[
+          { name: 'cart', label: 'Your cart (make, model, year)', placeholder: 'e.g. 2022 Club Car Onward', half: true },
+          { name: 'battery', label: 'Battery type', type: 'select', options: ['Lithium', 'Lead-acid', 'Gas cart', 'Not sure'], half: true },
+          { name: 'length', label: 'How long', type: 'radio', options: ['Off-season', 'Year-round', 'A few weeks / months'] },
+          { name: 'transport', label: 'Getting it here', type: 'radio', options: ["I'll drop it off", 'Please pick it up'], required: true },
+          { name: 'address', label: 'Pickup address (if we’re picking up)', autocomplete: 'street-address' },
+          { name: 'service', label: 'While it’s here', type: 'checkboxes', options: ['Tune-up before spring', 'Battery check', 'Quote me on upgrades'] },
+          { name: 'message', label: 'Notes', type: 'textarea' },
+        ]}
+      />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .incl {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: clamp(32px, 6vw, 88px);
+    align-items: start;
+  }
+  .incl__list {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 26px;
+  }
+  .incl__list li {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+  }
+  .incl__tick {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--ink);
+  }
+  .incl__list h3 {
+    margin-bottom: 4px;
+  }
+  .incl__list p {
+    margin: 0;
+  }
+  .incl__price {
+    font-size: 2rem;
+    transform: rotate(-3deg);
+    background: var(--accent);
+    display: inline-block;
+    padding: 10px 16px;
+    margin-bottom: 36px;
+  }
+  .incl__quote {
+    margin: 0;
+    padding: 22px;
+    background: #fff;
+    border: 1px solid var(--line);
+  }
+  .incl__quote blockquote {
+    margin: 0 0 8px;
+  }
+  .incl__quote figcaption {
+    font-weight: 600;
+  }
+  .sform {
+    background: var(--paper-2);
+  }
+  .sform__grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.4fr;
+    gap: clamp(28px, 5vw, 72px);
+  }
+  @media (max-width: 860px) {
+    .incl,
+    .sform__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

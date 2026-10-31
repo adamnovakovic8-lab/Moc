@@ -1,0 +1,194 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Icon from '../components/Icon.astro';
+import site from '../data/site.json';
+import services from '../data/services.json';
+import reviews from '../data/reviews.json';
+import { money } from '../lib/inventory.js';
+
+const { rates, points } = services.rentals;
+const kathy = reviews.find((r) => r.name === 'Kathy Klune')!;
+---
+
+<Base
+  title="Golf Cart Rentals in Niagara — Daily, Weekly, Monthly"
+  description="Rent a golf cart from RCR Performance in Niagara Falls — daily, weekly or monthly, gas or electric, four seats or six. Great for events, cottages and campgrounds."
+>
+  <PageHero
+    title="Golf cart rentals"
+    lede="For a weekend, an event, or the whole season. Gas or electric, four seats or six. Every cart goes out serviced and ready."
+    photo={{ src: 'shop/delivery-trailer.jpg', alt: 'Golf carts loaded on RCR’s trailer', caption: 'heading out on a delivery', r: -2, ar: '8 / 7' }}
+  >
+    <div class="ctas">
+      <a href="#form" class="btn">Ask about a rental</a>
+      <a href={site.phoneHref} class="btn btn--plain" data-track="rentals"><Icon name="phone" /> {site.phone}</a>
+    </div>
+  </PageHero>
+
+  <section class="section grain" aria-labelledby="how-title">
+    <div class="wrap rent">
+      <div>
+        <h2 id="how-title">How it works</h2>
+        <dl class="rent__points">
+          {
+            points.map((p) => (
+              <div>
+                <dt>{p.title}</dt>
+                <dd>{p.text}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <aside class="rent__rates" aria-labelledby="rates-title">
+        <h2 id="rates-title" class="rent__rates-h">Rates</h2>
+        <table>
+          <tbody>
+            {
+              rates.map((r) => (
+                <tr>
+                  <th scope="row">{r.period}</th>
+                  <td>{r.price ? money(r.price) : 'Call us'}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        <p class="small">Prices depend on the cart, how long you need it and where it's going. Call or send the form and we'll quote you.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="events dark" aria-labelledby="events-title">
+    <div class="wrap events__grid">
+      <div>
+        <h2 id="events-title">Events and fundraisers</h2>
+        <p>
+          Weddings, charity days, tournaments. Tell us the date, how many people and where, and we'll work out how many
+          carts you need — six-seat limo carts work well for groups.
+        </p>
+      </div>
+      <figure class="events__quote">
+        <blockquote><p>"{kathy.quote}"</p></blockquote>
+        <figcaption><strong>{kathy.name}</strong>, {kathy.context}</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="form" aria-labelledby="form-title">
+    <div class="wrap rform">
+      <div>
+        <h2 id="form-title">Ask about a rental</h2>
+        <p>This isn't a booking yet — we'll get back to you to confirm the cart, the dates and the price.</p>
+      </div>
+      <LeadForm
+        type="rental"
+        submit="Check availability"
+        fields={[
+          { name: 'start', label: 'Start date', type: 'date', required: true, half: true },
+          { name: 'end', label: 'Return date', type: 'date', required: true, half: true },
+          { name: 'seats', label: 'How many seats', type: 'radio', options: ['4', '6', 'Not sure'], required: true },
+          { name: 'power', label: 'Gas or electric', type: 'radio', options: ['No preference', 'Electric', 'Gas'] },
+          { name: 'quantity', label: 'How many carts', type: 'number', half: true, value: '1' },
+          { name: 'event', label: 'What’s it for?', type: 'select', half: true, options: ['Personal use', 'Wedding', 'Fundraiser / charity', 'Golf tournament', 'Other event'] },
+          { name: 'address', label: 'Where should it go?', autocomplete: 'street-address', hint: 'Campground name and site number is fine' },
+          { name: 'message', label: 'Anything else', type: 'textarea' },
+        ]}
+      />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .rent {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: clamp(32px, 6vw, 88px);
+    align-items: start;
+  }
+  .rent__points {
+    margin: 24px 0 0;
+    display: grid;
+    gap: 22px;
+  }
+  .rent__points dt {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: 1.6rem;
+    line-height: 1.1;
+  }
+  .rent__points dd {
+    margin: 4px 0 0;
+    max-width: 52ch;
+  }
+  .rent__rates {
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 24px 24px 18px;
+    border-left: 8px solid var(--yellow);
+  }
+  .rent__rates-h {
+    font-size: 1.8rem;
+  }
+  .rent__rates table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 14px;
+  }
+  .rent__rates th,
+  .rent__rates td {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--line);
+    text-align: left;
+  }
+  .rent__rates td {
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 0.9rem;
+  }
+  .events {
+    padding-block: clamp(56px, 8vw, 96px);
+  }
+  .events__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: clamp(28px, 6vw, 88px);
+    align-items: center;
+  }
+  .events__grid p {
+    color: #d6d2c8;
+  }
+  .events__quote {
+    margin: 0;
+    padding-left: 20px;
+    border-left: 4px solid var(--accent);
+  }
+  .events__quote blockquote {
+    margin: 0 0 10px;
+  }
+  .events__quote p {
+    font-size: 1.2rem;
+    color: #efece4;
+  }
+  .rform {
+    display: grid;
+    grid-template-columns: 0.8fr 1.4fr;
+    gap: clamp(28px, 5vw, 72px);
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .rent,
+    .events__grid,
+    .rform {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

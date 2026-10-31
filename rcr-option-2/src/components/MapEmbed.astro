@@ -1,0 +1,34 @@
+---
+import site from '../data/site.json';
+const q = encodeURIComponent(`${site.address.street}, ${site.address.city}, ${site.address.region}`);
+interface Props {
+  class?: string;
+}
+const { class: cls = '' } = Astro.props;
+---
+
+<div class:list={['map', cls]}>
+  <iframe
+    title={`Map to RCR Performance at ${site.address.street}, ${site.address.city}`}
+    src={`https://www.google.com/maps?q=${q}&z=13&output=embed`}
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+<style>
+  .map {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--ink-3);
+    overflow: hidden;
+  }
+  iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    /* Night-mode the map to sit inside the dark showroom */
+    filter: invert(0.92) hue-rotate(180deg) saturate(0.6) contrast(0.9);
+  }
+</style>

@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import site from '../data/site.json';
+---
+
+<!-- Landing page for form posts when JavaScript is off. -->
+<Base title="Thanks — we got it" description="Your message is on its way to RCR Performance." noindex>
+  <section class="ty wrap">
+    <h1>Thanks, we got it.</h1>
+    <p class="lede">We'll be in touch soon. If it's urgent, call us at <a href={site.phoneHref} data-track="thanks">{site.phone}</a>.</p>
+    <a href="/" class="btn">Back to the site <Icon name="arrow" /></a>
+  </section>
+</Base>
+
+<style>
+  .ty {
+    padding-top: calc(var(--header-h) + 96px);
+    padding-bottom: 140px;
+    min-height: 70svh;
+  }
+</style>

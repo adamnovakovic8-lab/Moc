@@ -1,0 +1,250 @@
+---
+import site from '../data/site.json';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const nav = [
+  { href: '/inventory', label: 'Carts' },
+  { href: '/custom-builds', label: 'Builds' },
+  { href: '/rentals', label: 'Rentals' },
+  { href: '/storage', label: 'Storage' },
+  { href: '/service', label: 'Service' },
+  { href: '/financing', label: 'Financing' },
+  { href: '/gallery', label: 'Gallery' },
+  { href: '/about', label: 'About' },
+];
+const isActive = (href: string) => path === href || path.startsWith(href + '/');
+---
+
+{
+  site.banner.enabled && (
+    <div class="banner">
+      <span class="mono">{site.banner.text}</span>
+      <a href={site.banner.href}>{site.banner.cta} →</a>
+    </div>
+  )
+}
+<header class="header dark" data-header>
+  <div class="header__inner">
+    <a href="/" class="header__logo" aria-label="RCR Performance Golf Carts — home"><Logo /></a>
+    <nav class="header__nav" aria-label="Main">
+      <ul>
+        {
+          nav.map((n) => (
+            <li>
+              <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <a href={site.phoneHref} class="header__call" data-track="header">
+        <Icon name="phone" />
+        <span class="header__num">{site.phone}</span>
+        <span class="visually-hidden">Call RCR</span>
+      </a>
+      <button class="header__menu" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
+        <Icon name="menu" class="i-open" />
+        <Icon name="close" class="i-close" />
+        <span class="visually-hidden">Menu</span>
+      </button>
+    </div>
+  </div>
+  <div class="livery header__livery" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <div class="mnav" id="mobile-nav" hidden>
+    <ul>
+      {
+        [...nav, { href: '/contact', label: 'Contact' }].map((n) => (
+          <li>
+            <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="mnav__foot">
+      <a href={site.phoneHref} class="btn" data-track="menu"><Icon name="phone" /> {site.phone}</a>
+      <p class="mono">{site.address.street}, {site.address.city}</p>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const panel = document.getElementById('mobile-nav');
+  if (btn && panel) {
+    const set = (open: boolean) => {
+      btn.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+      document.documentElement.classList.toggle('menu-open', open);
+    };
+    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', (e) => e.key === 'Escape' && set(false));
+  }
+</script>
+
+<style>
+  .banner {
+    background: var(--yellow);
+    color: var(--ink);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 14px;
+    padding: 8px var(--gutter);
+    font-size: 0.9rem;
+  }
+  .banner a {
+    font-weight: 700;
+  }
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    margin-bottom: calc((var(--header-h) + 17px) * -1);
+  }
+  .header__inner {
+    height: var(--header-h);
+    max-width: calc(var(--max) + 2 * var(--gutter));
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .header__logo {
+    font-size: 52px;
+    flex: none;
+    color: #fff;
+  }
+  .header__nav {
+    margin-left: auto;
+  }
+  .header__nav ul {
+    display: flex;
+    gap: clamp(14px, 1.6vw, 28px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .header__nav a {
+    font-stretch: 115%;
+    font-style: italic;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.92rem;
+    text-decoration: none;
+    padding: 6px 0;
+    border-bottom: 3px solid transparent;
+  }
+  .header__nav a:hover {
+    border-color: var(--purple-300);
+  }
+  .header__nav a[aria-current='page'] {
+    border-color: var(--yellow);
+  }
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header__call {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-weight: 600;
+    text-decoration: none;
+    background: var(--yellow);
+    color: var(--ink);
+    padding: 10px 14px;
+    min-height: 44px;
+  }
+  .header__livery {
+    gap: 3px;
+  }
+  .header__livery span {
+    height: 3px;
+  }
+  .header__menu {
+    display: none;
+    background: none;
+    border: 0;
+    color: #fff;
+    width: 48px;
+    height: 48px;
+    padding: 12px;
+    cursor: pointer;
+  }
+  .header__menu :global(.icon) {
+    width: 24px;
+    height: 24px;
+  }
+  .header__menu :global(.i-close),
+  .header__menu[aria-expanded='true'] :global(.i-open) {
+    display: none;
+  }
+  .header__menu[aria-expanded='true'] :global(.i-close) {
+    display: block;
+  }
+  .mnav {
+    position: fixed;
+    inset: calc(var(--header-h) + 17px) 0 0 0;
+    background: var(--purple-900);
+    padding: 16px var(--gutter) 40px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .mnav[hidden] {
+    display: none;
+  }
+  .mnav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .mnav li a {
+    display: block;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    font-stretch: 125%;
+    font-style: italic;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .mnav li a[aria-current='page'] {
+    color: var(--yellow);
+  }
+  .mnav__foot {
+    padding-top: 24px;
+    color: var(--ink-soft);
+  }
+  :global(html.menu-open) {
+    overflow: hidden;
+  }
+  @media (max-width: 1140px) {
+    .header__nav {
+      display: none;
+    }
+    .header__actions {
+      margin-left: auto;
+    }
+    .header__menu {
+      display: block;
+    }
+  }
+  @media (max-width: 520px) {
+    .header__num {
+      display: none;
+    }
+    .header__logo {
+      font-size: 42px;
+    }
+  }
+</style>

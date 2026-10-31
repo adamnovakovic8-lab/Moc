@@ -1,0 +1,92 @@
+---
+import '@fontsource-variable/archivo/wdth';
+import '@fontsource-variable/archivo/wdth-italic';
+import '@fontsource/ibm-plex-mono/400';
+import '@fontsource/ibm-plex-mono/600';
+import '../styles/global.css';
+import site from '../data/site.json';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  schema?: object | object[];
+  image?: string;
+  noindex?: boolean;
+}
+// Add a default /og.jpg after the photo shoot and set it as the fallback here.
+const { title, description, schema, image, noindex = false } = Astro.props;
+const fullTitle = title.includes('RCR') ? title : `${title} | RCR Performance Golf Carts`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const business = {
+  '@context': 'https://schema.org',
+  '@type': 'AutoDealer',
+  '@id': 'https://rcrperformance.ca/#business',
+  name: site.name,
+  url: 'https://rcrperformance.ca',
+  telephone: '+1-' + site.phone,
+  email: site.email,
+  foundingDate: String(site.foundedYear),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    addressLocality: site.address.city,
+    addressRegion: site.address.region,
+    addressCountry: site.address.country,
+    ...(site.address.postal ? { postalCode: site.address.postal } : {}),
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
+  openingHours: site.hours.map((h) => h.schema).filter(Boolean),
+  areaServed: ['Niagara Falls', 'Sherkston Shores', 'Fort Erie', 'Crystal Beach', 'Welland', 'Port Colborne', 'Niagara-on-the-Lake'],
+  sameAs: Object.values(site.socials),
+};
+const schemas = [business, ...(schema ? [schema].flat() : [])];
+---
+
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#1e1631" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+    <meta property="og:locale" content="en_CA" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <slot name="head" />
+    {schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+    {
+      site.gtmId && (
+        <script is:inline define:vars={{ id: site.gtmId }}>
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',id);
+        </script>
+      )
+    }
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <slot name="before-header" />
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import '../scripts/site.js';
+    </script>
+  </body>
+</html>

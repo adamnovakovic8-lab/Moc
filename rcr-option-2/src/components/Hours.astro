@@ -1,0 +1,42 @@
+---
+// Shows the hours list when RCR has set hours, otherwise the "call ahead" note.
+import site from '../data/site.json';
+interface Props {
+  class?: string;
+}
+const { class: cls = '' } = Astro.props;
+---
+
+{
+  site.hours.length ? (
+    <dl class:list={['hours', cls]}>
+      {site.hours.map((h: any) => (
+        <>
+          <dt>{h.days}</dt>
+          <dd>{h.time}</dd>
+        </>
+      ))}
+    </dl>
+  ) : (
+    <p class:list={['hours-note', cls]}>{site.hoursNote}</p>
+  )
+}
+
+<style>
+  .hours {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 16px;
+    margin: 0;
+  }
+  .hours dt {
+    opacity: 0.7;
+  }
+  .hours dd {
+    margin: 0;
+  }
+  .hours-note {
+    margin: 0;
+    max-width: 30ch;
+  }
+</style>

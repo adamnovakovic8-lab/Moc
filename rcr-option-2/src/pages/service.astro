@@ -1,0 +1,185 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import site from '../data/site.json';
+import services from '../data/services.json';
+import reviews from '../data/reviews.json';
+
+const serviceReviews = reviews.filter((r) => r.tags.includes('service'));
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'Golf cart maintenance and repair',
+  provider: { '@id': 'https://rcrperformance.ca/#business' },
+  areaServed: 'Niagara Region, Ontario',
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Golf cart services',
+    itemListElement: services.service.map((s) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: s.title } })),
+  },
+};
+---
+
+<Base
+  title="Golf Cart Service, Repairs & Lithium Conversions in Niagara"
+  description="Golf cart maintenance, repairs and lithium battery conversions in Niagara Falls. Any make, gas or electric. Pick-up service available. Book with RCR Performance."
+  schema={schema}
+>
+  <PageHero
+    title="Service & repairs"
+    lede="You don't have to have bought your cart from us. Gas or electric, any make — we'll take a look and tell you straight what it needs."
+    photo={{ src: 'shop/shop-detailing-limo.jpg', alt: 'Working on a red limo cart in the RCR shop', r: -1.5, ar: '1 / 1' }}
+  >
+    <div class="ctas">
+      <a href="#form" class="btn">Book service</a>
+      <a href={site.phoneHref} class="btn btn--plain" data-track="service"><Icon name="phone" /> {site.phone}</a>
+    </div>
+  </PageHero>
+
+  <section class="section grain" aria-labelledby="menu-title">
+    <div class="wrap">
+      <h2 id="menu-title">What we do</h2>
+      <dl class="menu">
+        {
+          services.service.map((s) => (
+            <div class="menu__item">
+              <dt>{s.title}</dt>
+              <dd>{s.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="lith" aria-labelledby="lith-title">
+    <div class="wrap lith__grid">
+      <figure class="print" style="--r:-1.5deg; --ar: 3 / 2">
+        <Photo src="shop/eco-lithium-battery.jpg" alt="An Eco lithium golf cart battery installed under the seat" sizes="(min-width: 900px) 45vw, 92vw" widths={[480, 800, 1200]} />
+        <figcaption>51V / 105 AH Eco lithium</figcaption>
+      </figure>
+      <div>
+        <h2 id="lith-title">Lithium conversions</h2>
+        <p>
+          Lithium batteries are lighter than lead-acid, charge faster, last longer and don't need watering — one of the
+          best upgrades you can make to an older electric cart. Every new cart on our lot already has one.
+        </p>
+        <a href="#form" class="btn">Ask about a conversion</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section grain" aria-labelledby="sr-title">
+    <div class="wrap">
+      <h2 id="sr-title">From people we've worked on carts for</h2>
+      <div class="sreviews">
+        {
+          serviceReviews.map((r) => (
+            <figure>
+              <blockquote>
+                <p>"{r.quote}"</p>
+              </blockquote>
+              <figcaption>— {r.name}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section bsform" id="form" aria-labelledby="form-title">
+    <div class="wrap bsform__grid">
+      <div>
+        <h2 id="form-title">Book service</h2>
+        <p>Describe the problem however you like — "makes a clunk turning left" is plenty to start with.</p>
+      </div>
+      <LeadForm
+        type="service"
+        submit="Book it in"
+        fields={[
+          { name: 'make', label: 'Make', type: 'select', options: ['MadJax', 'Club Car', 'E-Z-GO', 'Yamaha', 'Icon', 'Evolution', 'Other'], half: true },
+          { name: 'model', label: 'Model & year', half: true, placeholder: 'e.g. Precedent, 2019' },
+          { name: 'power', label: 'Power', type: 'radio', options: ['Electric — lithium', 'Electric — lead-acid', 'Gas', 'Not sure'] },
+          { name: 'needs', label: 'What do you need?', type: 'checkboxes', options: ['Maintenance', 'Repair', 'Lithium conversion', 'Battery check', 'Upgrades'] },
+          { name: 'issue', label: 'What’s going on?', type: 'textarea', required: true },
+          { name: 'pickup', label: 'Need us to pick it up?', type: 'radio', options: ["No, I'll bring it in", 'Yes, please pick it up'] },
+          { name: 'address', label: 'Pickup address', autocomplete: 'street-address', hint: 'Only if you want pick-up' },
+        ]}
+      />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .menu {
+    margin: 28px 0 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 56px;
+  }
+  .menu__item {
+    padding: 18px 0;
+    border-top: 2px solid var(--paper-ink);
+  }
+  .menu__item dt {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: 1.6rem;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .menu__item dd {
+    margin: 0;
+  }
+  .lith {
+    background: var(--paper-2);
+    padding-block: clamp(56px, 8vw, 96px);
+  }
+  .lith__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(28px, 6vw, 80px);
+    align-items: center;
+  }
+  .sreviews {
+    columns: 2 300px;
+    column-gap: 40px;
+    margin-top: 20px;
+  }
+  .sreviews figure {
+    break-inside: avoid;
+    margin: 0 0 28px;
+    padding-left: 16px;
+    border-left: 3px solid var(--accent);
+  }
+  .sreviews blockquote {
+    margin: 0 0 6px;
+  }
+  .sreviews figcaption {
+    font-weight: 600;
+  }
+  .bsform {
+    background: var(--paper-2);
+  }
+  .bsform__grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.4fr;
+    gap: clamp(28px, 5vw, 72px);
+  }
+  @media (max-width: 860px) {
+    .menu,
+    .lith__grid,
+    .bsform__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

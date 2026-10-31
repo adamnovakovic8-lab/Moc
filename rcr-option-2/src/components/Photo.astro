@@ -1,0 +1,32 @@
+---
+import { Picture } from 'astro:assets';
+import { photo } from '../lib/photos.js';
+
+interface Props {
+  src: string;
+  alt: string;
+  sizes?: string;
+  widths?: number[];
+  priority?: boolean;
+  class?: string;
+  /** CSS object-position, for keeping the cart in frame when cropped */
+  focus?: string;
+}
+const { src, alt, sizes = '(min-width: 900px) 50vw, 100vw', widths = [400, 700, 1000, 1400], priority = false, class: cls = '', focus } = Astro.props;
+const img = photo(src);
+const usable = widths.filter((w) => w <= img.width);
+if (!usable.length) usable.push(img.width);
+---
+
+<Picture
+  src={img}
+  alt={alt}
+  widths={usable}
+  sizes={sizes}
+  formats={['avif', 'webp']}
+  loading={priority ? 'eager' : 'lazy'}
+  fetchpriority={priority ? 'high' : 'auto'}
+  decoding={priority ? 'sync' : 'async'}
+  class={cls}
+  style={focus ? `object-position:${focus}` : undefined}
+/>

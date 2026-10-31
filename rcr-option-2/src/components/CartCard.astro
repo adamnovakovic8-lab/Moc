@@ -1,0 +1,119 @@
+---
+import Photo from './Photo.astro';
+import { money, priceOf, cartNumber } from '../lib/inventory.js';
+
+interface Props {
+  cart: any;
+  number?: number;
+  layout?: 'grid' | 'list' | 'hero';
+  headingLevel?: 'h2' | 'h3';
+  sizes?: string;
+}
+const { cart, layout = 'grid', headingLevel: H = 'h3', sizes = '(min-width: 900px) 33vw, 92vw' } = Astro.props;
+// Each cart keeps the same race number everywhere on the site
+const number = cartNumber(cart.slug);
+const onSale = cart.salePrice != null;
+const cover = cart.photos?.[0];
+const name = cart.title.replace(/^MadJax X-Series /, '');
+---
+
+<article class:list={['card', `card--${layout}`]}>
+  <div class="card__photo">
+    {cover && <Photo src={cover.src} alt={cover.alt} sizes={sizes} widths={[360, 640]} />}
+    {number && <span class="roundel card__no" aria-hidden="true">{number}</span>}
+  </div>
+  <div class="card__body">
+    <p class="mono card__model">{cart.year} {cart.brand} {cart.model}</p>
+    <H class="card__title"><a href={`/inventory/${cart.slug}`}>{name}</a></H>
+    <p class="mono card__spec">{cart.passengers} seats / {cart.lifted ? 'lifted' : 'stock ht'} / 105AH li</p>
+    {layout === 'list' && <p class="card__blurb">{cart.blurb}</p>}
+    <p class="plate card__price">
+      {onSale && <s>{money(cart.price)}</s>}
+      {money(priceOf(cart))}
+    </p>
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: grid;
+    align-content: start;
+    background: #fff;
+    color: var(--ink);
+    border-bottom: 4px solid var(--purple);
+  }
+  .card__photo {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--mist);
+  }
+  .card__photo :global(picture) {
+    height: 100%;
+    transition: transform 0.4s ease;
+  }
+  .card:hover .card__photo :global(picture) {
+    transform: scale(1.04);
+  }
+  .card__no {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 54px;
+    height: 54px;
+    font-size: 1.45rem;
+    border-width: 3px;
+  }
+  .card__body {
+    padding: 16px 18px 20px;
+  }
+  .card__model {
+    color: var(--ink-soft);
+    margin: 0 0 6px;
+    font-size: 0.72rem;
+  }
+  .card__title {
+    font-size: 1.35rem;
+    margin-bottom: 8px;
+  }
+  .card__title a {
+    text-decoration: none;
+  }
+  .card__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .card__title a:focus-visible {
+    outline: none;
+  }
+  .card:has(.card__title a:focus-visible) {
+    outline: 3px solid var(--purple);
+    outline-offset: 3px;
+  }
+  .card__spec {
+    margin: 0 0 14px;
+    font-size: 0.74rem;
+    color: var(--ink-soft);
+  }
+  .card__price {
+    margin: 0;
+  }
+  .card__blurb {
+    margin: 0 0 14px;
+  }
+  .card--list {
+    grid-template-columns: minmax(220px, 42%) 1fr;
+    align-items: stretch;
+  }
+  .card--list .card__photo {
+    aspect-ratio: auto;
+    min-height: 220px;
+  }
+  @media (max-width: 640px) {
+    .card--list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

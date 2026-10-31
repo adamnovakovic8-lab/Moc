@@ -1,0 +1,105 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CartCard from '../../components/CartCard.astro';
+import Icon from '../../components/Icon.astro';
+import site from '../../data/site.json';
+import towns from '../../data/towns.json';
+import { getCarts, money, priceOf } from '../../lib/inventory.js';
+
+export function getStaticPaths() {
+  return towns.map((town) => ({ params: { town: town.slug }, props: { town } }));
+}
+const { town } = Astro.props;
+const carts = getCarts().filter((c) => c.featured).slice(0, 3);
+const lowest = Math.min(...getCarts().map(priceOf));
+const others = towns.filter((t) => t.slug !== town.slug);
+---
+
+<Base
+  title={`Golf Carts in ${town.name} — Sales, Rentals, Storage & Service`}
+  description={`Golf carts for ${town.name}: new MadJax carts from ${money(lowest)}, custom builds, rentals, winter storage and repairs from RCR Performance. ${town.drive}`}
+>
+  <PageHero eyebrow={town.name} title={`Golf carts for ${town.name}`} lede={town.angle}>
+    <p class="town__drive"><Icon name="truck" /> {town.drive}</p>
+  </PageHero>
+
+  <section class="section wrap town">
+    <ul class="town__uses">
+      {town.uses.map((u, i) => <li>{u}</li>)}
+    </ul>
+    <div class="town__cta">
+      <a href="/inventory" class="btn">See carts for sale <Icon name="arrow" /></a>
+      <a href={site.phoneHref} class="btn btn--plain" data-track={`town-${town.slug}`}><Icon name="phone" /> {site.phone}</a>
+    </div>
+  </section>
+
+  <section class="wrap town__carts" aria-labelledby="town-carts">
+    <h2 id="town-carts">On the lot right now</h2>
+    <ul>{carts.map((c) => <li><CartCard cart={c} /></li>)}</ul>
+  </section>
+
+  <nav class="wrap town__others" aria-label="Other areas we serve">
+    <span>We also serve</span>
+    {others.map((t) => <a href={`/golf-carts/${t.slug}`}>{t.name}</a>)}
+  </nav>
+</Base>
+
+<style>
+  .town__drive {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .town__uses {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .town__uses li {
+    display: flex;
+    gap: 20px;
+    align-items: baseline;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--display);
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: clamp(1.6rem, 3.6vw, 3rem);
+    line-height: 1;
+  }
+  .town__uses span {
+    font-size: 1rem;
+    color: var(--accent);
+  }
+  .town__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .town__carts ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .town__others {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    padding-block: 64px 96px;
+    font-family: var(--display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .town__others span {
+    color: var(--paper-mute);
+  }
+</style>

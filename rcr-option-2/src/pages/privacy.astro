@@ -1,0 +1,44 @@
+---
+import Legal from '../layouts/Legal.astro';
+import site from '../data/site.json';
+---
+
+<!-- Draft for client/legal review before launch (PIPEDA + CASL). -->
+<Legal title="Privacy Policy" description="How RCR Performance Golf Carts collects, uses and protects your personal information." updated="October 2026">
+  <p>
+    RCR Performance Golf Carts ("we", "us") respects your privacy. This policy explains what personal information we
+    collect through rcrperformance.ca, why, and what we do with it, in line with Canada's Personal Information Protection
+    and Electronic Documents Act (PIPEDA) and Canada's Anti-Spam Legislation (CASL).
+  </p>
+
+  <h2>What we collect</h2>
+  <ul>
+    <li>What you type into our forms: your name, phone or email, and details about the cart, rental, storage or service you're asking about.</li>
+    <li>Your email address if you join our newsletter, with a record of your consent.</li>
+    <li>Basic, anonymous website analytics (pages visited, device type, how you found us) through Google Tag Manager and Google Analytics.</li>
+  </ul>
+  <p>
+    We never ask for sensitive financial information — such as your SIN, banking details or income — through this
+    website. Financing applications are completed in person.
+  </p>
+
+  <h2>Why we use it</h2>
+  <ul>
+    <li>To answer your question, quote a build, confirm a rental or storage spot, or book service.</li>
+    <li>To send our newsletter, only if you've said yes.</li>
+    <li>To understand how the website is used so we can improve it.</li>
+  </ul>
+  <p>We don't sell or rent your information. We only share it with service providers who help us run the website and email (for example, our hosting and email delivery providers), and only as needed.</p>
+
+  <h2>Newsletter consent (CASL)</h2>
+  <p>We only email you if you've ticked the consent box. Every email has an unsubscribe link, and you can also ask us to remove you at any time.</p>
+
+  <h2>How long we keep it</h2>
+  <p>We keep enquiry records as long as needed to serve you and meet our legal and business obligations, then delete them.</p>
+
+  <h2>Your rights</h2>
+  <p>You can ask to see, correct or delete the personal information we hold about you. Contact us at <a href={`mailto:${site.email}`}>{site.email}</a> or {site.phone}.</p>
+
+  <h2>Contact</h2>
+  <p>RCR Performance Golf Carts, {site.address.street}, {site.address.city}, {site.address.region}.</p>
+</Legal>

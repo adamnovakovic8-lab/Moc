@@ -1,0 +1,107 @@
+---
+// RCR lockup redrawn as SVG from the client's logo: waving purple/black
+// checkered flag, slanted chrome "RCR", yellow "Performance Golf Carts".
+// Built from paths so the intro can stroke-draw it. Swap for the vector
+// master when RCR sends their source files (PRD §11).
+interface Props {
+  class?: string;
+  id?: string;
+  tagline?: boolean;
+}
+const { class: cls = '', id, tagline = true } = Astro.props;
+const u = Math.random().toString(36).slice(2, 7);
+
+// Upright letter outlines, 60 units tall; slanted by the group transform.
+const R = (x: number) =>
+  `M${x} 60 V0 H${x + 38} Q${x + 52} 0 ${x + 52} 14 V22 Q${x + 52} 34 ${x + 40} 35 L${x + 55} 60 H${x + 40} L${x + 27} 37 H${x + 13} V60 Z ` +
+  `M${x + 13} 11 V26 H${x + 36} Q${x + 40} 26 ${x + 40} 22 V15 Q${x + 40} 11 ${x + 36} 11 Z`;
+const C = (x: number) =>
+  `M${x + 52} 0 V12 H${x + 18} Q${x + 13} 12 ${x + 13} 17 V43 Q${x + 13} 48 ${x + 18} 48 H${x + 52} V60 H${x + 14} Q${x} 60 ${x} 46 V14 Q${x} 0 ${x + 14} 0 Z`;
+const letters = [R(0), C(62), R(124)];
+const flag = 'M8 46 C40 26 72 58 112 36 C136 23 158 26 182 34 L160 112 C138 102 116 100 92 112 C58 128 34 104 4 118 Z';
+---
+
+<svg
+  class:list={['logo', !tagline && 'logo--compact', cls]}
+  id={id}
+  viewBox={tagline ? '0 0 440 132' : '0 0 440 86'}
+  role="img"
+  aria-label="RCR Performance Golf Carts"
+>
+  <defs>
+    <pattern id={`chk-${u}`} width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="skewX(-14) rotate(-8)">
+      <rect width="28" height="28" fill="#0a0a0b"></rect>
+      <rect width="14" height="14" fill="#533e7f"></rect>
+      <rect x="14" y="14" width="14" height="14" fill="#533e7f"></rect>
+    </pattern>
+    <linearGradient id={`chr-${u}`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"></stop>
+      <stop offset="0.42" stop-color="#e2e4e8"></stop>
+      <stop offset="0.5" stop-color="#7f858e"></stop>
+      <stop offset="0.6" stop-color="#cfd2d8"></stop>
+      <stop offset="1" stop-color="#f7f8fa"></stop>
+    </linearGradient>
+    <linearGradient id={`fold-${u}`} x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#000" stop-opacity="0.55"></stop>
+      <stop offset="0.3" stop-color="#000" stop-opacity="0"></stop>
+      <stop offset="0.55" stop-color="#fff" stop-opacity="0.12"></stop>
+      <stop offset="0.8" stop-color="#000" stop-opacity="0.35"></stop>
+      <stop offset="1" stop-color="#000" stop-opacity="0"></stop>
+    </linearGradient>
+  </defs>
+
+  <g class="logo-flag">
+    <path d={flag} fill={`url(#chk-${u})`}></path>
+    <path d={flag} fill={`url(#fold-${u})`}></path>
+  </g>
+
+  <!-- speed lines -->
+  <g class="logo-speed" stroke="#d9dce1" stroke-width="3" stroke-linecap="round">
+    <path d="M150 30 H196"></path>
+    <path d="M140 44 H190"></path>
+    <path d="M150 58 H184"></path>
+  </g>
+
+  <g transform="translate(212 12) skewX(-20)">
+    {
+      letters.map((d) => (
+        <>
+          <path class="logo-fill" d={d} fill={`url(#chr-${u})`} fill-rule="evenodd" />
+          <path class="logo-stroke" d={d} fill="none" stroke="#f5f6f8" stroke-width="2.5" stroke-linejoin="round" />
+        </>
+      ))
+    }
+  </g>
+
+  {
+    tagline && (
+      <text
+        class="logo-tag"
+        x="430"
+        y="112"
+        text-anchor="end"
+        fill="#edd513"
+        stroke="#0a0a0b"
+        stroke-width="4"
+        paint-order="stroke"
+        font-family="'Figtree Variable', system-ui, sans-serif"
+        font-style="italic"
+        font-weight="900"
+        font-size="30"
+        letter-spacing="-0.5"
+        transform="skewX(-8)"
+        style="transform-box: fill-box; transform-origin: right"
+      >
+        Performance Golf Carts
+      </text>
+    )
+  }
+</svg>
+
+<style>
+  .logo {
+    height: 1em;
+    width: auto;
+    overflow: visible;
+  }
+</style>

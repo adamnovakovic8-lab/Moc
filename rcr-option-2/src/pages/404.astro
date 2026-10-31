@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import CartArt from '../components/CartArt.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<Base title="Off the path (404)" description="This page doesn't exist." noindex>
+  <section class="nf wrap">
+    <div class="nf__scene" aria-hidden="true">
+      <!-- tracks veer off the path... and stop -->
+      <svg class="nf__tracks" viewBox="0 0 800 200" preserveAspectRatio="none">
+        <path d="M0 150 H380 C470 150 520 120 600 60" fill="none" stroke="currentColor" stroke-width="18" stroke-dasharray="5 7"></path>
+        <path d="M0 180 H390 C490 180 540 150 630 90" fill="none" stroke="currentColor" stroke-width="18" stroke-dasharray="5 7"></path>
+      </svg>
+      <div class="nf__cart">
+        <CartArt colour="#533e7f" decorative />
+      </div>
+    </div>
+    <p class="label">Page not found</p>
+    <h1>Went off the path.</h1>
+    <p class="lede">This page took a wrong turn somewhere. Let's get you back on the cart path.</p>
+    <div class="nf__ctas">
+      <a href="/" class="btn">Back to home <Icon name="arrow" /></a>
+      <a href="/inventory" class="btn btn--plain">Browse carts</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    padding-top: calc(var(--header-h) + 64px);
+    padding-bottom: 120px;
+    min-height: 90svh;
+  }
+  .nf__scene {
+    position: relative;
+    height: clamp(180px, 30vw, 300px);
+    margin-bottom: 24px;
+  }
+  .nf__tracks {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    color: var(--paper-mute);
+    opacity: 0.35;
+  }
+  .nf__cart {
+    position: absolute;
+    right: 6%;
+    top: -6%;
+    width: clamp(160px, 28vw, 300px);
+    transform: rotate(-24deg);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .nf__cart {
+      animation: wobble 2.6s ease-in-out infinite;
+    }
+  }
+  @keyframes wobble {
+    50% {
+      transform: rotate(-20deg) translateY(-4px);
+    }
+  }
+  .nf__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>

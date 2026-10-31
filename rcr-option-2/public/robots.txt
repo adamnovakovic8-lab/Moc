@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /api/
+Disallow: /thanks
+
+Sitemap: https://rcrperformance.ca/sitemap-index.xml

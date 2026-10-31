@@ -1,0 +1,371 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CartCard from '../../components/CartCard.astro';
+import Photo from '../../components/Photo.astro';
+import Icon from '../../components/Icon.astro';
+import { getCarts, filterOptions, applyFilters, SORTS, money, priceOf } from '../../lib/inventory.js';
+
+// Server-rendered so every filtered view has its own shareable URL (F3)
+// and works with JavaScript off.
+export const prerender = false;
+
+const params = Astro.url.searchParams;
+const all = getCarts();
+const groups = filterOptions(all);
+const results = applyFilters(all, params);
+const view = params.get('view') === 'list' ? 'list' : 'grid';
+const sort = SORTS[params.get('sort') as keyof typeof SORTS] ? params.get('sort')! : 'featured';
+const active = groups.flatMap((g) => params.getAll(g.key).map((v) => ({ key: g.key, value: v, label: g.options.find((o) => o.value === v)?.label ?? v })));
+
+const urlWith = (mutate: (p: URLSearchParams) => void) => {
+  const p = new URLSearchParams(params);
+  mutate(p);
+  const s = p.toString();
+  return `/inventory${s ? `?${s}` : ''}`;
+};
+const without = (key: string, value: string) =>
+  urlWith((p) => {
+    const rest = p.getAll(key).filter((v) => v !== value);
+    p.delete(key);
+    rest.forEach((v) => p.append(key, v));
+  });
+
+const itemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: results.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: `https://rcrperformance.ca/inventory/${c.slug}`,
+    name: c.title,
+  })),
+};
+---
+
+<Base
+  title="Golf Carts for Sale in Niagara"
+  description={`${all.length} new 2025 MadJax X-Series golf carts in stock at RCR Performance, Niagara Falls — 4-passenger and 6-passenger limo, lifted, 105 AH lithium. From ${money(Math.min(...all.map(priceOf)))}.`}
+  schema={itemList}
+>
+  <PageHero eyebrow="On the lot" title="Carts for sale" lede="Every cart here is in our yard on Montrose Road. Prices are what you pay before tax — trade-ins welcome. Questions? Call and ask." />
+
+  <section class="inv wrap" aria-label="Carts for sale">
+    <details class="inv__details" open data-filter-details>
+    <summary class="inv__summary">Filter{active.length > 0 && ` (${active.length})`}</summary>
+    <form class="inv__filters" method="get" action="/inventory" data-filters>
+      <div class="inv__filters-head">
+        <h2>Filter</h2>
+        {active.length > 0 && <a href="/inventory" class="inv__clear">Clear all</a>}
+      </div>
+      {
+        groups.map((g) => (
+          <fieldset class="inv__group">
+            <legend>{g.label}</legend>
+            {g.options.map((o) => (
+              <label class="choice">
+                <input type="checkbox" name={g.key} value={o.value} checked={params.getAll(g.key).includes(o.value)} />
+                <span>
+                  {o.label} <small>({o.count})</small>
+                </span>
+              </label>
+            ))}
+          </fieldset>
+        ))
+      }
+      <input type="hidden" name="view" value={view} />
+      <input type="hidden" name="sort" value={sort} />
+      <button class="btn btn--sm inv__apply" type="submit">Show carts</button>
+    </form>
+    </details>
+
+    <div class="inv__main">
+      <div class="inv__bar">
+        <p class="inv__count" role="status">
+          <strong>{results.length}</strong>
+          {results.length === 1 ? 'cart' : 'carts'}
+        </p>
+        <form method="get" action="/inventory" class="inv__sort" data-sort>
+          {[...params.entries()].filter(([k]) => k !== 'sort').map(([k, v]) => <input type="hidden" name={k} value={v} />)}
+          <label for="sort" class="visually-hidden">Sort by</label>
+          <select id="sort" name="sort">
+            {Object.entries(SORTS).map(([k, s]) => <option value={k} selected={k === sort}>{s.label}</option>)}
+          </select>
+          <noscript><button class="btn btn--sm" type="submit">Sort</button></noscript>
+        </form>
+        <div class="inv__views" role="group" aria-label="Layout">
+          <a href={urlWith((p) => p.set('view', 'grid'))} aria-current={view === 'grid' ? 'true' : undefined} aria-label="Grid view"><Icon name="grid" /></a>
+          <a href={urlWith((p) => p.set('view', 'list'))} aria-current={view === 'list' ? 'true' : undefined} aria-label="List view"><Icon name="list" /></a>
+        </div>
+      </div>
+
+      {
+        active.length > 0 && (
+          <ul class="inv__chips" aria-label="Active filters">
+            {active.map((a) => (
+              <li>
+                <a href={without(a.key, a.value)}>
+                  {a.label} <Icon name="close" />
+                  <span class="visually-hidden">remove filter</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      {
+        results.length ? (
+          <ul class:list={['inv__results', `inv__results--${view}`]}>
+            {results.map((c, i) => (
+              <li>
+                <CartCard cart={c} number={i + 1} layout={view} headingLevel="h2" />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div class="inv__empty">
+            <figure class="inv__empty-art">
+              <Photo src="builds/purple-matte/side.jpg" alt="A matte purple custom cart RCR built" sizes="300px" widths={[300, 600]} />
+            </figure>
+            <div>
+              <h2>Nothing on the lot matches that.</h2>
+              <p class="lede">
+                We can order it in or build it. Tell us what you're after and we'll come back with options.
+              </p>
+              <div class="inv__empty-ctas">
+                <a href="/custom-builds#form" class="btn">
+                  Order a custom cart <Icon name="arrow" />
+                </a>
+                <a href="/inventory" class="btn btn--line">
+                  Clear filters
+                </a>
+              </div>
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<script>
+  // With JS on, filters apply as soon as you tick a box.
+  document.querySelector<HTMLFormElement>('[data-filters]')?.addEventListener('change', (e) => {
+    (e.currentTarget as HTMLFormElement).requestSubmit();
+  });
+  document.querySelector<HTMLFormElement>('[data-sort]')?.addEventListener('change', (e) => {
+    (e.currentTarget as HTMLFormElement).requestSubmit();
+  });
+  const apply = document.querySelector<HTMLElement>('.inv__apply');
+  if (apply) apply.style.display = 'none';
+  // Phones: filters start folded so the carts are the first thing you see.
+  const details = document.querySelector<HTMLDetailsElement>('[data-filter-details]');
+  if (details && matchMedia('(max-width: 900px)').matches) details.open = false;
+</script>
+
+<style>
+  .inv {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 48px;
+    padding-block: 48px 120px;
+  }
+  .inv__details {
+    position: sticky;
+    top: calc(var(--header-h) + 16px);
+    align-self: start;
+    max-height: calc(100vh - var(--header-h) - 32px);
+    overflow-y: auto;
+  }
+  .inv__summary {
+    display: none;
+  }
+  .inv__filters-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 2px solid var(--accent);
+    margin-bottom: 8px;
+  }
+  .inv__filters-head h2 {
+    font-size: 1.6rem;
+    margin: 0 0 6px;
+  }
+  .inv__clear {
+    font-size: 0.9rem;
+  }
+  .inv__group {
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    margin: 0;
+    padding: 14px 0;
+    display: grid;
+    gap: 8px;
+  }
+  .inv__group legend {
+    font-family: var(--display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.85rem;
+    color: var(--paper-mute);
+    padding: 0;
+    margin-bottom: 8px;
+    float: left;
+    width: 100%;
+  }
+  .inv__group .choice {
+    cursor: pointer;
+    min-height: 28px;
+  }
+  .inv__group small {
+    color: var(--paper-mute);
+  }
+  .inv__apply {
+    margin-top: 16px;
+  }
+  .inv__bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .inv__count {
+    margin: 0 auto 0 0;
+    font-family: var(--display);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+  .inv__count strong {
+    font-size: 2.4rem;
+    font-weight: 900;
+    margin-right: 6px;
+  }
+  .inv__sort select {
+    min-width: 200px;
+  }
+  .inv__views {
+    display: flex;
+    border: 1px solid var(--line);
+  }
+  .inv__views a {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    color: var(--paper-mute);
+  }
+  .inv__views a[aria-current] {
+    background: var(--ink);
+    color: #fff;
+  }
+  .inv__chips {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .inv__chips a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    min-height: 36px;
+    background: var(--accent);
+    border-radius: 99px;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .inv__chips :global(.icon) {
+    width: 14px;
+    height: 14px;
+  }
+  .inv__results {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 20px;
+  }
+  .inv__results--grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  .inv__empty {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 40px;
+    align-items: center;
+    padding: 48px;
+    border: 1.5px dashed var(--line);
+  }
+  .inv__empty-art {
+    max-width: 320px;
+  }
+  .inv__empty-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  @media (max-width: 900px) {
+    .inv {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .inv__details {
+      position: static;
+      max-height: none;
+      overflow: visible;
+      border: 1px solid var(--line);
+    }
+    .inv__summary {
+      display: flex;
+      align-items: center;
+      min-height: 52px;
+      padding: 0 16px;
+      cursor: pointer;
+      font-family: var(--display);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 1.1rem;
+    }
+    .inv__filters-head h2 {
+      display: none;
+    }
+    .inv__filters {
+      padding: 0 16px 16px;
+      display: flex;
+      gap: 8px 20px;
+      flex-wrap: wrap;
+      overflow: visible;
+    }
+    .inv__filters-head {
+      width: 100%;
+    }
+    .inv__group {
+      border-bottom: 0;
+      padding: 0;
+      flex: 1 1 140px;
+    }
+    .inv__empty {
+      grid-template-columns: 1fr;
+      padding: 24px;
+    }
+  }
+  @media (max-width: 520px) {
+    .inv__bar {
+      flex-wrap: wrap;
+    }
+    .inv__sort {
+      order: 3;
+      width: 100%;
+    }
+    .inv__sort select {
+      width: 100%;
+    }
+  }
+</style>

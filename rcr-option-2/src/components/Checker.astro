@@ -1,0 +1,37 @@
+---
+// Checkered flag strip from the RCR logo. `wave` bends it like a flag in the wind.
+interface Props {
+  class?: string;
+  rows?: number;
+  wave?: boolean;
+  size?: number;
+}
+const { class: cls = '', rows = 2, wave = false, size = 14 } = Astro.props;
+const u = Math.random().toString(36).slice(2, 7);
+const h = rows * size;
+const W = 1200;
+const a = h * 0.5; // wave amplitude
+const shape = wave
+  ? `M0 ${a} Q${W * 0.25} ${-a} ${W * 0.5} ${a} T${W} ${a} L${W} ${a + h} Q${W * 0.75} ${3 * a + h} ${W * 0.5} ${a + h} T0 ${a + h} Z`
+  : `M0 0 H${W} V${h} H0 Z`;
+const vh = wave ? h + 2 * a : h;
+---
+
+<svg class:list={['checker', cls]} viewBox={`0 0 ${W} ${vh}`} preserveAspectRatio="none" aria-hidden="true">
+  <defs>
+    <pattern id={`ck-${u}`} width={size * 2} height={size * 2} patternUnits="userSpaceOnUse">
+      <rect width={size * 2} height={size * 2} fill="var(--ink)"></rect>
+      <rect width={size} height={size} fill="var(--purple)"></rect>
+      <rect x={size} y={size} width={size} height={size} fill="var(--purple)"></rect>
+    </pattern>
+  </defs>
+  <path d={shape} fill={`url(#ck-${u})`}></path>
+</svg>
+
+<style>
+  .checker {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

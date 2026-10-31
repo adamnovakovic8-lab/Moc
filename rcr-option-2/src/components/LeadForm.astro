@@ -1,0 +1,224 @@
+---
+import Icon from './Icon.astro';
+
+export interface Field {
+  name: string;
+  label: string;
+  type?: 'text' | 'email' | 'tel' | 'date' | 'number' | 'select' | 'textarea' | 'radio' | 'checkboxes';
+  options?: string[];
+  required?: boolean;
+  half?: boolean;
+  hint?: string;
+  autocomplete?: string;
+  placeholder?: string;
+  value?: string;
+}
+interface Props {
+  type: string;
+  fields: Field[];
+  submit?: string;
+  hidden?: Record<string, string>;
+  id?: string;
+  class?: string;
+  note?: string;
+}
+const { type, fields, submit = 'Send', hidden = {}, id = 'form', class: cls = '', note } = Astro.props;
+const uid = `${id}-${type}`;
+const base: Field[] = [
+  { name: 'name', label: 'Your name', required: true, half: true, autocomplete: 'name' },
+  { name: 'contact', label: 'Phone or email', required: true, half: true, autocomplete: 'tel', hint: "Whichever you'd rather we use" },
+];
+const all = [...base, ...fields];
+---
+
+<form class:list={['lead', cls]} id={id} action="/api/lead" method="post" data-lead={type} novalidate={false}>
+  <input type="hidden" name="_type" value={type} />
+  <input type="hidden" name="_page" value={Astro.url.pathname} />
+  <input type="hidden" name="_t" value="" />
+  {Object.entries(hidden).map(([k, v]) => <input type="hidden" name={k} value={v} />)}
+  <div class="visually-hidden" aria-hidden="true">
+    <label for={`${uid}-website`}>Leave this empty</label>
+    <input id={`${uid}-website`} type="text" name="website" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <p class="lead__error" data-url-error hidden role="alert">
+    That didn't send — please check the required fields, or call us at 905-348-1965.
+  </p>
+
+  <div class="lead__grid">
+    {
+      all.map((f) => {
+        const fid = `${uid}-${f.name}`;
+        const req = f.required ? <span aria-hidden="true" class="req">*</span> : null;
+        if (f.type === 'radio' || f.type === 'checkboxes') {
+          return (
+            <fieldset class:list={['field', 'field--full', 'lead__set']}>
+              <legend>
+                {f.label} {req}
+              </legend>
+              <div class="lead__chips">
+                {f.options!.map((o, i) => (
+                  <label class="chip">
+                    <input
+                      type={f.type === 'radio' ? 'radio' : 'checkbox'}
+                      name={f.name}
+                      value={o}
+                      required={f.type === 'radio' && f.required}
+                      checked={f.value === o || (f.type === 'radio' && !f.value && i === 0 && f.required)}
+                    />
+                    <span>{o}</span>
+                  </label>
+                ))}
+              </div>
+              {f.hint && <span class="hint">{f.hint}</span>}
+            </fieldset>
+          );
+        }
+        return (
+          <div class:list={['field', f.half ? 'field--half' : 'field--full']}>
+            <label for={fid}>
+              {f.label} {req}
+            </label>
+            {f.type === 'select' ? (
+              <select id={fid} name={f.name} required={f.required}>
+                <option value="">Choose…</option>
+                {f.options!.map((o) => (
+                  <option selected={f.value === o}>{o}</option>
+                ))}
+              </select>
+            ) : f.type === 'textarea' ? (
+              <textarea id={fid} name={f.name} required={f.required} placeholder={f.placeholder}>
+                {f.value}
+              </textarea>
+            ) : (
+              <input
+                id={fid}
+                name={f.name}
+                type={f.type ?? 'text'}
+                required={f.required}
+                autocomplete={f.autocomplete}
+                placeholder={f.placeholder}
+                value={f.value}
+                aria-describedby={f.hint ? `${fid}-hint` : undefined}
+              />
+            )}
+            {f.hint && (
+              <span class="hint" id={`${fid}-hint`}>
+                {f.hint}
+              </span>
+            )}
+          </div>
+        );
+      })
+    }
+  </div>
+
+  {note && <p class="lead__note">{note}</p>}
+
+  <div class="lead__foot">
+    <button class="btn" type="submit">{submit} <Icon name="arrow" /></button>
+    <p class="lead__status" data-status role="status" aria-live="polite" tabindex="-1"></p>
+  </div>
+</form>
+
+<script>
+  if (new URLSearchParams(location.search).get('error')) {
+    document.querySelectorAll<HTMLElement>('[data-url-error]').forEach((el) => (el.hidden = false));
+  }
+</script>
+
+<style>
+  .lead {
+    position: relative;
+  }
+  .lead__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 18px;
+  }
+  .field--full {
+    grid-column: 1 / -1;
+  }
+  .req {
+    color: var(--danger);
+  }
+  .lead__set {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .lead__set legend {
+    margin-bottom: 8px;
+    padding: 0;
+  }
+  .lead__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    position: relative;
+    cursor: pointer;
+  }
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+  }
+  .chip span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 2px solid var(--ink);
+    background: #fff;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    transition: background 0.15s, color 0.15s;
+  }
+  .chip:hover span {
+    background: var(--mist);
+  }
+  .chip input:checked + span {
+    background: var(--purple);
+    border-color: var(--purple);
+    color: #fff;
+  }
+  .chip input:focus-visible + span {
+    outline: 3px solid var(--yellow);
+    outline-offset: 2px;
+  }  .lead__note {
+    font-size: 0.88rem;
+    color: var(--paper-mute);
+    margin-top: 18px;
+  }
+  .lead__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 24px;
+    margin-top: 28px;
+  }
+  .lead__status {
+    margin: 0;
+    font-weight: 600;
+  }
+  .lead__status[data-state='ok'] {
+    color: #1f6b2a;
+  }
+  .lead__status[data-state='error'],
+  .lead__error {
+    color: var(--danger);
+  }
+  @media (max-width: 600px) {
+    .lead__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

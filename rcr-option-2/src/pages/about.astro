@@ -1,0 +1,172 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import site from '../data/site.json';
+import reviews from '../data/reviews.json';
+
+const years = new Date().getFullYear() - site.foundedYear;
+const kathy = reviews.find((r) => r.name === 'Kathy Klune')!;
+const kevin = reviews.find((r) => r.name === 'Kevin Brown')!;
+const values = [
+  { t: 'Integrity', d: 'Unique cart designs and customization options — built the way you asked for.' },
+  { t: 'Community', d: 'Community-minded, and happy to help with local fundraisers and events.' },
+  { t: 'Consistency', d: 'Real after-sales support and service, season after season.' },
+  { t: 'Quality', d: 'Brand-name, reliable products built to last.' },
+];
+---
+
+<Base
+  title="About Rob & Kim — Family-run in Niagara since 2017"
+  description={`RCR Performance Golf Carts is a family business run by Rob and Kim on Montrose Road in Niagara Falls, serving the area for ${years}+ years.`}
+>
+  <section class="ab dark" aria-labelledby="about-title">
+    <div class="wrap ab__grid">
+      <div>
+        <h1 id="about-title">Rob, Kim &amp; a yard full of carts</h1>
+        <p class="lede">
+          RCR Performance is a family-run business on Montrose Road in Niagara Falls. We've been selling, building and
+          looking after golf carts in the area for {years} years.
+        </p>
+      </div>
+      <figure class="print ab__photo" style="--r:2deg; --ar: 7 / 6">
+        <Photo src="shop/lot-red-lifted.jpg" alt="Lifted red carts outside the shop" priority sizes="(min-width: 900px) 40vw, 92vw" widths={[480, 800, 1200]} />
+      </figure>
+    </div>
+  </section>
+
+  <section class="section grain">
+    <div class="wrap story">
+      <div class="story__text">
+        <p>
+          We treat every customer like family. That means taking the time to listen, helping you choose the right cart
+          and accessories, and being there afterward — whether it's your first cart, a custom build you've been dreaming
+          about, or an upgrade to the one you've got.
+        </p>
+        <p>
+          A lot of the people we sell carts to come back for storage, service and their next cart. Kevin Brown has bought
+          three from us since 2021. That kind of thing is why we do this.
+        </p>
+        <p class="story__sign marker">— Rob &amp; Kim</p>
+      </div>
+      <figure class="print print--tape story__photo" style="--r:-2.5deg; --ar: 1 / 1" data-drop>
+        <Photo src="shop/shop-detailing-limo.jpg" alt="Working on a limo cart in the shop" sizes="(min-width: 900px) 30vw, 80vw" widths={[360, 640, 900]} />
+        <figcaption>in the shop</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section values" aria-labelledby="values-title">
+    <div class="wrap">
+      <h2 id="values-title">Why people choose us</h2>
+      <dl class="values__list">
+        {
+          values.map((v) => (
+            <div>
+              <dt>{v.t}</dt>
+              <dd>{v.d}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="community dark" aria-labelledby="community-title">
+    <div class="wrap community__grid">
+      <div>
+        <h2 id="community-title">In the community</h2>
+        <p>We help out local groups with carts for fundraisers and events, like the Rotary Club of Fort Erie.</p>
+        <a href="/contact" class="btn">Planning an event? <Icon name="arrow" /></a>
+      </div>
+      <figure class="community__quote">
+        <blockquote><p>"{kathy.quote}"</p></blockquote>
+        <figcaption><strong>{kathy.name}</strong>, {kathy.context}</figcaption>
+      </figure>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ab {
+    padding: calc(var(--header-h) + clamp(40px, 7vw, 88px)) 0 clamp(48px, 7vw, 88px);
+  }
+  .ab__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+  .ab .lede {
+    color: #d6d2c8;
+  }
+  .story {
+    display: grid;
+    grid-template-columns: 1.3fr 0.8fr;
+    gap: clamp(32px, 6vw, 88px);
+    align-items: center;
+  }
+  .story__text p {
+    font-size: 1.15rem;
+  }
+  .story__sign {
+    font-size: 1.6rem;
+    color: var(--purple);
+  }
+  .values {
+    background: var(--paper-2);
+  }
+  .values__list {
+    margin: 24px 0 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px 56px;
+  }
+  .values__list div {
+    border-top: 2px solid var(--paper-ink);
+    padding-top: 14px;
+  }
+  .values__list dt {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: 1.7rem;
+  }
+  .values__list dd {
+    margin: 4px 0 0;
+  }
+  .community {
+    padding-block: clamp(56px, 8vw, 96px);
+  }
+  .community__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: clamp(28px, 6vw, 88px);
+    align-items: center;
+  }
+  .community__grid p {
+    color: #d6d2c8;
+  }
+  .community__quote {
+    margin: 0;
+    padding-left: 20px;
+    border-left: 4px solid var(--accent);
+  }
+  .community__quote blockquote {
+    margin: 0 0 10px;
+  }
+  .community__quote p {
+    font-size: 1.15rem;
+    color: #efece4;
+  }
+  @media (max-width: 860px) {
+    .ab__grid,
+    .story,
+    .community__grid,
+    .values__list {
+      grid-template-columns: 1fr;
+    }
+    .story__photo {
+      max-width: 360px;
+    }
+  }
+</style>

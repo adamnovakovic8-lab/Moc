@@ -1,0 +1,81 @@
+---
+import Photo from './Photo.astro';
+interface Props {
+  eyebrow?: string;
+  title: string;
+  accent?: string;
+  lede?: string;
+  class?: string;
+  photo?: { src: string; alt: string; caption?: string; focus?: string; r?: number; ar?: string };
+}
+const { eyebrow, title, accent, lede, class: cls = '', photo } = Astro.props;
+---
+
+<header class:list={['page-hero', 'dark', 'ph', photo && 'ph--photo', cls]}>
+  {
+    photo && (
+      <div class="ph__photo">
+        <Photo src={photo.src} alt={photo.alt} priority sizes="(min-width: 900px) 50vw, 100vw" widths={[480, 800, 1200]} focus={photo.focus} />
+      </div>
+    )
+  }
+  <div class="wrap ph__inner">
+    <div class="ph__copy">
+      {eyebrow && <p class="kicker">{eyebrow}</p>}
+      <h1>{title}{accent && <> <span class="hl">{accent}</span></>}</h1>
+      {lede && <p class="lede">{lede}</p>}
+      <slot />
+    </div>
+  </div>
+</header>
+
+<style>
+  .ph {
+    padding: calc(var(--header-h) + clamp(56px, 8vw, 104px)) 0 calc(clamp(48px, 6vw, 80px) + var(--slant));
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--slant)), 0 100%);
+  }
+  .ph__copy {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+  }
+  .ph__copy .lede {
+    color: #ddd7ea;
+  }
+  .ph--photo .ph__copy {
+    max-width: min(560px, 48%);
+  }
+  .ph__photo {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 50%;
+    clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .ph__photo :global(picture) {
+    height: 100%;
+  }
+  .ph__photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(30 22 49 / 0.35), transparent 40%);
+  }
+  @media (max-width: 860px) {
+    .ph--photo {
+      padding-top: 0;
+    }
+    .ph__photo {
+      position: relative;
+      width: 100%;
+      height: 260px;
+      margin-top: calc(var(--header-h) + 17px);
+      margin-bottom: 32px;
+      clip-path: polygon(0 0, 100% 0, 100% 86%, 0 100%);
+    }
+    .ph--photo .ph__copy {
+      max-width: none;
+    }
+  }
+</style>

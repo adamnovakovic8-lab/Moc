@@ -1,0 +1,216 @@
+---
+import site from '../data/site.json';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import Checker from './Checker.astro';
+import Hours from './Hours.astro';
+
+const year = new Date().getFullYear();
+const towns = [
+  ['niagara-falls', 'Niagara Falls'],
+  ['sherkston-shores', 'Sherkston Shores'],
+  ['fort-erie', 'Fort Erie'],
+  ['crystal-beach', 'Crystal Beach'],
+  ['welland', 'Welland'],
+];
+const links = [
+  ['/inventory', 'Carts for sale'],
+  ['/custom-builds', 'Custom builds'],
+  ['/rentals', 'Rentals'],
+  ['/storage', 'Storage'],
+  ['/service', 'Service & repairs'],
+  ['/financing', 'Financing'],
+  ['/gallery', 'Gallery'],
+  ['/about', 'About'],
+  ['/contact', 'Contact'],
+];
+---
+
+<footer class="footer dark" id="footer">
+  <Checker class="footer__chk" rows={2} size={14} />
+  <div class="wrap footer__grid">
+    <div class="footer__brand">
+      <a href="/" class="footer__logo" aria-label="RCR Performance — home"><Logo /></a>
+      <p class="mono footer__est">Family-run · Niagara · Est. {site.foundedYear}</p>
+    </div>
+
+    <div>
+      <p class="mono footer__h">Call</p>
+      <a href={site.phoneHref} class="footer__phone" data-track="footer">{site.phone}</a>
+      <p class="mono footer__h">Email</p>
+      <a href={`mailto:${site.email}`} class="footer__email" data-track="footer">{site.email}</a>
+    </div>
+
+    <div>
+      <p class="mono footer__h">Shop</p>
+      <address>
+        {site.address.street}<br />
+        {site.address.city}, {site.address.region} {site.address.postal}
+      </address>
+      <Hours />
+    </div>
+
+    <nav aria-label="Footer">
+      <p class="mono footer__h">Pages</p>
+      <ul class="footer__links">
+        {links.map(([href, label]) => <li><a href={href}>{label}</a></li>)}
+      </ul>
+    </nav>
+
+    <form class="footer__news" action="/api/newsletter" method="post" data-newsletter>
+      <p class="mono footer__h">Newsletter</p>
+      <div class="footer__news-row">
+        <label for="nl-email" class="visually-hidden">Email address</label>
+        <input id="nl-email" type="email" name="email" autocomplete="email" placeholder="you@email.com" required />
+        <button class="btn btn--sm" type="submit">Join</button>
+      </div>
+      <label class="choice small">
+        <input type="checkbox" name="consent" value="yes" required />
+        <span>Yes, RCR Performance can email me. I can unsubscribe any time.</span>
+      </label>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" class="visually-hidden" aria-hidden="true" />
+      <p class="footer__msg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+
+  <div class="wrap footer__bottom mono">
+    <span>© {year} RCR Performance Golf Carts</span>
+    <span class="footer__areas">
+      {towns.map(([slug, name]) => <a href={`/golf-carts/${slug}`}>{name}</a>)}
+    </span>
+    <span class="footer__legal">
+      <a href="/privacy">Privacy</a>
+      <a href="/accessibility">Accessibility</a>
+      <a href={site.socials.facebook} rel="noopener" target="_blank"><Icon name="facebook" label="Facebook" /></a>
+      <a href={site.socials.instagram} rel="noopener" target="_blank"><Icon name="instagram" label="Instagram" /></a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-newsletter]').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = form.querySelector('.footer__msg')!;
+      const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } }).catch(() => null);
+      const data = res ? await res.json().catch(() => null) : null;
+      msg.textContent = data?.message ?? 'Something went wrong — try again or give us a call.';
+      if (data?.ok) {
+        form.reset();
+        (window as any).dataLayer?.push({ event: 'newsletter_signup' });
+      }
+    });
+  });
+</script>
+
+<style>
+  .footer {
+    position: relative;
+    background: var(--purple-950);
+    padding-top: clamp(64px, 8vw, 100px);
+  }
+  .footer :global(.footer__chk) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 0.8fr 1.3fr;
+    gap: 36px;
+  }
+  .footer__logo {
+    display: inline-block;
+    font-size: 70px;
+    color: #fff;
+  }
+  .footer__est {
+    color: var(--ink-soft);
+    margin-top: 14px;
+  }
+  .footer__h {
+    color: var(--yellow);
+    margin: 0 0 8px;
+  }
+  .footer__phone {
+    display: block;
+    font-stretch: 125%;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 1.35rem;
+    white-space: nowrap;
+    text-decoration: none;
+    margin-bottom: 18px;
+  }
+  .footer__email {
+    word-break: break-all;
+    font-size: 0.92rem;
+  }
+  address {
+    font-style: normal;
+    margin-bottom: 12px;
+  }
+  .footer__links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 4px;
+  }
+  .footer__links a {
+    text-decoration: none;
+  }
+  .footer__links a:hover {
+    color: var(--yellow);
+  }
+  .footer__news-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .footer__msg {
+    color: var(--lithium);
+  }
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    align-items: center;
+    margin-top: 56px;
+    padding-block: 20px 32px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-soft);
+  }
+  .footer__areas,
+  .footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    align-items: center;
+  }
+  .footer__legal {
+    margin-left: auto;
+  }
+  .footer__legal :global(.icon) {
+    width: 20px;
+    height: 20px;
+  }
+  @media (max-width: 1100px) {
+    .footer__grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .footer__brand,
+    .footer__news {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 600px) {
+    .footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .footer__legal {
+      margin-left: 0;
+    }
+  }
+</style>

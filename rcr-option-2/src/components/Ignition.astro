@@ -1,0 +1,255 @@
+---
+import Logo from './Logo.astro';
+const tag = 'Niagara · Since 2017';
+---
+
+<!--
+  "Ignition" — homepage opening sequence (PRD §6). It's an overlay: the real
+  hero is rendered underneath from the first byte. Hidden unless the inline
+  head script adds .intro-on (first homepage visit this session).
+-->
+<div class="ignition" id="ignition" role="presentation">
+  <button class="ig-skip" type="button" data-ig-skip>Skip intro</button>
+  <div class="ig-stage" aria-hidden="true">
+    <span class="ig-trim"></span>
+
+    <svg class="ig-cart" viewBox="0 0 300 230">
+      <defs>
+        <radialGradient id="ig-glow" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#fff6d9" stop-opacity="1"></stop>
+          <stop offset="0.25" stop-color="#ffe9a8" stop-opacity="0.55"></stop>
+          <stop offset="1" stop-color="#ffcf6b" stop-opacity="0"></stop>
+        </radialGradient>
+        <linearGradient id="ig-rim" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="#fff6d9" stop-opacity="0.9"></stop>
+          <stop offset="0.6" stop-color="#fff6d9" stop-opacity="0.08"></stop>
+        </linearGradient>
+      </defs>
+      <g class="ig-silhouette" fill="none" stroke="url(#ig-rim)" stroke-width="2">
+        <rect x="36" y="16" width="228" height="10" rx="4"></rect>
+        <path d="M58 26 L70 128 M242 26 L230 128"></path>
+        <path d="M76 34 L84 120 L216 120 L224 34 Z" opacity="0.4"></path>
+        <path d="M44 132 L256 132 L266 182 Q266 190 256 190 L44 190 Q34 190 34 182 Z"></path>
+        <rect x="46" y="192" width="40" height="30" rx="6"></rect>
+        <rect x="214" y="192" width="40" height="30" rx="6"></rect>
+        <path d="M120 160 H180"></path>
+      </g>
+      <circle class="ig-glow" cx="86" cy="156" r="70" fill="url(#ig-glow)"></circle>
+      <circle class="ig-glow" cx="214" cy="156" r="70" fill="url(#ig-glow)"></circle>
+      <circle class="ig-lamp" cx="86" cy="156" r="9" fill="#fff6d9"></circle>
+      <circle class="ig-lamp" cx="214" cy="156" r="9" fill="#fff6d9"></circle>
+    </svg>
+
+    <div class="ig-brand">
+      <Logo class="ig-logo" />
+      <p class="ig-tag">{[...tag].map((ch) => <span>{ch}</span>)}<i class="ig-caret"></i></p>
+    </div>
+  </div>
+  <div class="ig-tread" aria-hidden="true"></div>
+</div>
+
+<style>
+  .ignition {
+    display: none;
+  }
+  :global(html.intro-on) .ignition {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: #050505;
+    color: var(--paper);
+    clip-path: inset(0 0 0 0);
+    /* If the script never runs, get out of the way */
+    animation: ig-failsafe 0.01s 5s forwards;
+  }
+  :global(html.intro-on) {
+    overflow: hidden;
+  }
+  @keyframes ig-failsafe {
+    to {
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+  .ig-skip {
+    position: absolute;
+    right: 16px;
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 3;
+    background: transparent;
+    color: var(--paper-dim);
+    border: 1px solid #333;
+    border-radius: 99px;
+    padding: 10px 18px;
+    min-height: 44px;
+    font: 600 0.9rem var(--body);
+    cursor: pointer;
+  }
+  .ig-skip:hover,
+  .ig-skip:focus-visible {
+    color: var(--paper);
+    border-color: var(--paper);
+  }
+  .ig-stage {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 3vh;
+  }
+  .ig-trim {
+    position: absolute;
+    left: 6vw;
+    right: 6vw;
+    top: 50%;
+    height: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 18px var(--accent);
+    transform-origin: left center;
+    transform: scaleX(0);
+  }
+  .ig-cart {
+    width: min(78vw, 360px);
+    overflow: visible;
+  }
+  .ig-silhouette,
+  .ig-glow,
+  .ig-lamp {
+    opacity: 0;
+  }
+  .ig-glow {
+    mix-blend-mode: screen;
+  }
+  .ig-brand {
+    display: grid;
+    justify-items: center;
+    gap: 14px;
+  }
+  .ig-brand :global(.ig-logo) {
+    width: min(86vw, 520px);
+    height: auto;
+  }
+  .ig-tag {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: clamp(0.8rem, 2.6vw, 1rem);
+    color: var(--paper-dim);
+    white-space: pre;
+    min-height: 1.4em;
+  }
+  .ig-tag span {
+    opacity: 0;
+  }
+  .ig-caret {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background: var(--accent);
+    vertical-align: -0.12em;
+    margin-left: 2px;
+    opacity: 0;
+  }
+  .ig-tread {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 64px;
+    transform: translateX(-80px);
+    background:
+      repeating-linear-gradient(160deg, transparent 0 8px, #2b2b2b 8px 14px) left / 26px 100% no-repeat,
+      repeating-linear-gradient(20deg, transparent 0 8px, #2b2b2b 8px 14px) right / 26px 100% no-repeat;
+    filter: drop-shadow(-12px 0 24px rgb(var(--purple-rgb) / 0.9));
+  }
+  /* Landscape desktop: cart left, logo right */
+  @media (min-width: 900px) and (min-aspect-ratio: 4/3) {
+    .ig-stage {
+      grid-auto-flow: column;
+      gap: 6vw;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const root = document.documentElement;
+  const el = document.getElementById('ignition');
+
+  if (el && root.classList.contains('intro-on')) {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const q = (s: string) => el.querySelectorAll(s);
+    const heroChars = document.querySelectorAll('[data-hero-char]');
+    const heroArt = document.querySelector('[data-hero-art]');
+    (window as any).__lenis?.stop();
+
+    const finish = () => {
+      el.style.display = 'none';
+      root.classList.remove('intro-on');
+      (window as any).__lenis?.start();
+      gsap.set(heroChars, { clearProps: 'all' });
+      cleanup();
+    };
+
+    const tl = gsap.timeline({ onComplete: finish, defaults: { ease: 'power2.out' } });
+
+    if (reduced) {
+      // 400ms logo fade only
+      gsap.set(q('.ig-cart, .ig-trim, .ig-tread, .ig-tag'), { display: 'none' });
+      tl.from(q('.ig-logo'), { opacity: 0, duration: 0.2 }).to(el, { opacity: 0, duration: 0.2 });
+    } else {
+      const strokes = [...q('.logo-stroke')] as SVGPathElement[];
+      strokes.forEach((p) => {
+        const len = p.getTotalLength();
+        gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+      });
+      gsap.set(q('.ig-logo'), { opacity: 1 });
+      gsap.set(q('.ig-logo .logo-fill, .ig-logo .logo-tag, .ig-logo .logo-speed'), { opacity: 0 });
+      gsap.set(q('.ig-logo .logo-flag'), { clipPath: 'inset(0 100% 0 0)' });
+
+      tl
+        // 0.0–0.4 dashboard trim line
+        .to(q('.ig-trim'), { scaleX: 1, duration: 0.4, ease: 'power3.inOut' }, 0)
+        .to(q('.ig-trim'), { opacity: 0, duration: 0.3 }, 0.55)
+        // 0.4–1.0 headlights double-blink, rim-light the silhouette
+        .to(q('.ig-glow, .ig-lamp'), { opacity: 1, duration: 0.06 }, 0.4)
+        .to(q('.ig-glow, .ig-lamp'), { opacity: 0.1, duration: 0.06 }, 0.5)
+        .to(q('.ig-glow, .ig-lamp'), { opacity: 1, duration: 0.06 }, 0.6)
+        .to(q('.ig-glow, .ig-lamp'), { opacity: 0.25, duration: 0.05 }, 0.68)
+        .to(q('.ig-glow, .ig-lamp'), { opacity: 1, duration: 0.2 }, 0.76)
+        .to(q('.ig-silhouette'), { opacity: 1, duration: 0.4 }, 0.6)
+        // 1.0–1.8 flag waves in, chrome letters draw then fill, tagline types
+        .to(q('.ig-logo .logo-flag'), { clipPath: 'inset(0 0% 0 0)', duration: 0.45, ease: 'power2.out' }, 0.95)
+        .to(strokes, { strokeDashoffset: 0, duration: 0.5, stagger: 0.08, ease: 'power1.inOut' }, 1.0)
+        .to(q('.ig-logo .logo-speed'), { opacity: 1, x: 0, duration: 0.25, startAt: { x: -30 } }, 1.35)
+        .to(q('.ig-logo .logo-fill'), { opacity: 1, duration: 0.25 }, 1.45)
+        .to(q('.ig-logo .logo-tag'), { opacity: 1, duration: 0.2, x: 0, startAt: { x: 24 }, ease: 'back.out(2)' }, 1.55)
+        .set(q('.ig-caret'), { opacity: 1 }, 1.25)
+        .to(q('.ig-tag span'), { opacity: 1, duration: 0.01, stagger: 0.022 }, 1.3)
+        // Prepare the hero underneath while it's still covered
+        .set(heroChars, { yPercent: 100, opacity: 0 }, 1.75)
+        .set(heroArt, { scale: 1.08 }, 1.75)
+        // 1.8–2.4 tire-track wipe pulls the curtain
+        .fromTo(el, { clipPath: 'inset(0 0 0 0%)' }, { clipPath: 'inset(0 0 0 100%)', duration: 0.6, ease: 'power2.inOut' }, 1.8)
+        .fromTo(q('.ig-tread'), { x: -80 }, { x: () => innerWidth + 10, duration: 0.6, ease: 'power2.inOut' }, 1.8)
+        // 2.4–2.8 hero lands
+        .to(heroChars, { yPercent: 0, opacity: 1, duration: 0.4, stagger: 0.012, ease: 'back.out(1.6)' }, 2.25)
+        .to(heroArt, { scale: 1, duration: 0.55, ease: 'power2.out' }, 2.2);
+    }
+
+    // Any click, tap, scroll or key jumps to the end state
+    const skip = () => tl.progress(1);
+    const events = ['pointerdown', 'wheel', 'touchmove', 'keydown'] as const;
+    events.forEach((ev) => addEventListener(ev, skip, { passive: true, once: true }));
+    function cleanup() {
+      events.forEach((ev) => removeEventListener(ev, skip));
+    }
+    el.querySelector('[data-ig-skip]')?.addEventListener('click', skip);
+    (el.querySelector('[data-ig-skip]') as HTMLElement)?.focus({ preventScroll: true });
+  }
+</script>

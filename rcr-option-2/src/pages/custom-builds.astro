@@ -1,0 +1,190 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import builds from '../data/builds.json';
+
+const full = builds.filter((b) => b.photos.length >= 4);
+const singles = builds.filter((b) => b.photos.length < 4);
+---
+
+<Base
+  title="Custom Golf Cart Builds in Niagara"
+  description="Custom golf carts built by RCR Performance in Niagara Falls: paint, decals, lift kits, wheels, seats and lighting. See real builds from our shop and start your own."
+>
+  <PageHero
+    eyebrow="Built on Montrose Road"
+    title="Custom builds"
+    lede="Paint, decals, lift kits, wheels, seats, lights and sound. These all came out of our shop — tell us what you'd like and we'll work out what it takes."
+    photo={{ src: 'builds/princess/side.jpg', alt: 'Purple custom cart with gold crown decals', focus: '40% 60%' }}
+  >
+    <a href="#form" class="btn" style="margin-top:8px">Start your build <Icon name="arrow" /></a>
+  </PageHero>
+
+  <section class="section" aria-label="Builds">
+    <div class="wrap">
+      {
+        full.map((b, i) => (
+          <article class:list={['entry', i % 2 && 'entry--flip']} id={b.slug}>
+            <div class="entry__main">
+              <Photo src={b.photos[0].src} alt={b.photos[0].alt} sizes="(min-width: 900px) 60vw, 100vw" widths={[480, 800, 1200]} />
+            </div>
+            <div class="entry__info">
+              <p class="kicker">Build {String(i + 1).padStart(2, '0')}</p>
+              <h2>{b.name}</h2>
+              <p>{b.summary}</p>
+              <div class="entry__details">
+                {b.photos.slice(1, 4).map((p) => (
+                  <div class="entry__thumb">
+                    <Photo src={p.src} alt={p.alt} sizes="(min-width: 900px) 10vw, 30vw" widths={[200, 360]} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </article>
+        ))
+      }
+
+      <h2 class="more__h">More from the shop</h2>
+      <ul class="more">
+        {
+          singles.map((b) => (
+            <li>
+              <div class="more__photo" data-drop>
+                <Photo src={b.photos[0].src} alt={b.photos[0].alt} sizes="(min-width: 900px) 25vw, 46vw" widths={[300, 600]} />
+              </div>
+              <p class="fig">{b.name}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section bsec" id="form" aria-labelledby="form-title">
+    <div class="wrap bform">
+      <div>
+        <p class="kicker">Your turn</p>
+        <h2 id="form-title">Start your build</h2>
+        <p>Rough ideas are fine. If you've got a photo of something you like, mention it and email it to <a href="mailto:kim.rcrperformance@gmail.com">kim.rcrperformance@gmail.com</a>.</p>
+        <ol class="bform__steps mono">
+          <li>Send the idea + a rough budget</li>
+          <li>We call to go over options and price</li>
+          <li>We build it, with photos along the way</li>
+          <li>Pick it up, or we deliver</li>
+        </ol>
+      </div>
+      <div class="bform__card">
+        <LeadForm
+          type="build"
+          submit="Send my build idea"
+          fields={[
+            { name: 'base', label: 'Starting point', type: 'radio', options: ['New 4-seater', 'New 6-seat limo', 'My own cart', 'Not sure'], required: true },
+            { name: 'colour', label: 'Colour / paint / wrap', half: true, placeholder: 'e.g. matte purple' },
+            { name: 'seats', label: 'Seats', type: 'select', half: true, options: ['Keep stock', 'Two-tone', 'Custom stitching', 'Not sure'] },
+            { name: 'wheels', label: 'Wheels & height', type: 'select', half: true, options: ['Stock', 'Lifted, all-terrain tires', 'Low, street tires', 'Not sure'] },
+            { name: 'budget', label: 'Budget', type: 'select', half: true, options: ['Under $20k', '$20–25k', '$25–30k', '$30k+', 'Not sure yet'] },
+            { name: 'extras', label: 'Add-ons', type: 'checkboxes', options: ['Decals', 'Light bar', 'Sound', 'Brush guard', 'Rear flip seat', 'Lithium', 'Enclosure'] },
+            { name: 'message', label: 'Tell us about it', type: 'textarea' },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .entry {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+    margin-bottom: clamp(64px, 9vw, 120px);
+  }
+  .entry--flip {
+    grid-template-columns: 1fr 1.6fr;
+  }
+  .entry--flip .entry__main {
+    order: 2;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%);
+  }
+  .entry__main {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    clip-path: polygon(0 0, 92% 0, 100% 100%, 0 100%);
+  }
+  .entry__main :global(picture) {
+    height: 100%;
+  }
+  .entry__info h2 {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+  }
+  .entry__details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 20px;
+  }
+  .entry__thumb {
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+  .entry__thumb :global(picture) {
+    height: 100%;
+  }
+  .more__h {
+    border-top: 3px solid var(--ink);
+    padding-top: 20px;
+  }
+  .more {
+    list-style: none;
+    margin: 24px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+  .more__photo {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+  .more__photo :global(picture) {
+    height: 100%;
+  }
+  .bform {
+    display: grid;
+    grid-template-columns: 0.8fr 1.4fr;
+    gap: clamp(28px, 5vw, 72px);
+    align-items: start;
+  }
+  .bsec {
+    background: var(--mist);
+  }
+  .bform__steps {
+    padding-left: 22px;
+    display: grid;
+    gap: 10px;
+    margin-top: 28px;
+    color: var(--purple);
+  }
+  .bform__card {
+    background: #fff;
+    border-top: 6px solid var(--purple);
+    padding: clamp(20px, 3vw, 36px);
+  }
+  @media (max-width: 860px) {
+    .entry,
+    .entry--flip,
+    .bform {
+      grid-template-columns: 1fr;
+    }
+    .entry--flip .entry__main {
+      order: 0;
+    }
+    .more {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

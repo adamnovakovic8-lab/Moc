@@ -1,0 +1,532 @@
+---
+import Base from '../../layouts/Base.astro';
+import CartCard from '../../components/CartCard.astro';
+import Estimator from '../../components/Estimator.astro';
+import LeadForm from '../../components/LeadForm.astro';
+import Photo from '../../components/Photo.astro';
+import Icon from '../../components/Icon.astro';
+import site from '../../data/site.json';
+import { getCarts, money, priceOf, similarCarts } from '../../lib/inventory.js';
+import { photo as photoMeta } from '../../lib/photos.js';
+import { getImage } from 'astro:assets';
+
+export function getStaticPaths() {
+  const all = getCarts();
+  return all.map((cart, i) => ({ params: { slug: cart.slug }, props: { cart, number: i + 1 } }));
+}
+const { cart, number } = Astro.props;
+const price = priceOf(cart);
+const onSale = cart.salePrice != null;
+const similar = similarCarts(cart);
+const label = `${cart.year} ${cart.title}`;
+const name = cart.title.replace(/^MadJax X-Series /, '');
+const photos = cart.photos ?? [];
+const ogImage = photos[0] ? (await getImage({ src: photoMeta(photos[0].src), width: 1200, format: 'jpg' })).src : undefined;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': ['Product', 'Vehicle'],
+  name: label,
+  brand: { '@type': 'Brand', name: cart.brand },
+  model: cart.model,
+  vehicleModelDate: String(cart.year),
+  color: cart.colourName,
+  seatingCapacity: cart.passengers,
+  fuelType: 'Electricity',
+  itemCondition: 'https://schema.org/NewCondition',
+  description: cart.blurb,
+  url: `https://rcrperformance.ca/inventory/${cart.slug}`,
+  ...(ogImage ? { image: new URL(ogImage, 'https://rcrperformance.ca').href } : {}),
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: 'CAD',
+    price,
+    availability: cart.status === 'sold' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+    seller: { '@id': 'https://rcrperformance.ca/#business' },
+  },
+};
+---
+
+<Base
+  title={`${label} — ${money(price)}`}
+  description={`${cart.blurb} ${cart.passengers} seats, ${cart.battery}. ${money(price)} at RCR Performance in Niagara Falls.`}
+  schema={schema}
+  image={ogImage}
+>
+  <article class="cd">
+    <!-- Title band -->
+    <header class="cd__band dark">
+      <div class="wrap cd__band-inner">
+        <span class="roundel cd__no" aria-hidden="true">{number}</span>
+        <div>
+          <p class="mono cd__crumbs"><a href="/inventory">Carts for sale</a> / {cart.year} {cart.brand} {cart.model}</p>
+          <h1>{name}</h1>
+        </div>
+        <p class="plate cd__price">
+          {onSale && <s>{money(cart.price)}</s>}
+          {money(price)}
+          <span class="cd__hst">+HST</span>
+        </p>
+      </div>
+    </header>
+
+    <!-- Photos -->
+    <section class="cd__gallery wrap" aria-label="Photos">
+      <div class="cd__stage">
+        {
+          photos.map((p: any, i: number) => (
+            <div class="cd__view" data-view={i} hidden={i !== 0}>
+              <Photo src={p.src} alt={p.alt} priority={i === 0} sizes="(min-width: 900px) 66vw, 100vw" widths={[480, 640]} />
+            </div>
+          ))
+        }
+        <button class="cd__arrow cd__arrow--prev" type="button" data-step="-1" aria-label="Previous photo"><Icon name="arrow" /></button>
+        <button class="cd__arrow" type="button" data-step="1" aria-label="Next photo"><Icon name="arrow" /></button>
+        <span class="mono cd__count" data-count aria-hidden="true">01 / {String(photos.length).padStart(2, '0')}</span>
+      </div>
+      <div class="cd__thumbs" role="group" aria-label="Choose a photo">
+        {
+          photos.map((p: any, i: number) => (
+            <button type="button" aria-pressed={i === 0 ? 'true' : 'false'} data-thumb={i} aria-label={`Photo ${i + 1}: ${p.alt}`}>
+              <Photo src={p.src} alt="" sizes="160px" widths={[160, 320]} />
+            </button>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Summary + specs -->
+    <section class="cd__main wrap">
+      <div class="cd__summary">
+        <p class="lede">{cart.blurb}</p>
+        <p class="mono cd__colour">Colour: {cart.colourName}</p>
+        <div class="cd__ctas">
+          <a href="#ask" class="btn" data-open-tab="ask">Ask about this cart</a>
+          <a href="#ask" class="btn btn--line" data-open-tab="drive">Book a test drive</a>
+        </div>
+        <p class="cd__call">Or call <a href={site.phoneHref} data-track="cart-detail"><strong>{site.phone}</strong></a> · trade-ins welcome</p>
+
+        <h2 class="cd__h">Spec sheet</h2>
+        <table class="cd__specs">
+          <tbody>
+            <tr><th scope="row">Seats</th><td>{cart.passengers}</td></tr>
+            {Object.entries(cart.specs).map(([k, v]) => <tr><th scope="row">{k}</th><td>{v as string}</td></tr>)}
+          </tbody>
+        </table>
+
+        <h2 class="cd__h">Also fitted</h2>
+        <ul class="cd__features">
+          {cart.features.map((f: string) => <li>{f}</li>)}
+        </ul>
+      </div>
+      <aside class="cd__side">
+        <h2 class="cd__h">Monthly</h2>
+        <Estimator price={price} lockPrice compact />
+        <p class="small"><a href="/financing" class="text-link">How financing works</a></p>
+      </aside>
+    </section>
+
+    <section class="cd__ask" id="ask" aria-labelledby="ask-title">
+      <div class="wrap cd__ask-grid">
+        <div>
+          <p class="kicker">No. {number} — {name}</p>
+          <h2 id="ask-title">Interested?</h2>
+          <p>Ask a question or pick a day to come drive it. We'll get back to you to confirm.</p>
+        </div>
+        <div>
+          <div class="cd__tabs" role="tablist" aria-label="What would you like to do?">
+            <button role="tab" id="tab-ask" aria-controls="panel-ask" aria-selected="true" data-tab="ask">Ask a question</button>
+            <button role="tab" id="tab-drive" aria-controls="panel-drive" aria-selected="false" data-tab="drive" tabindex="-1">Test drive</button>
+          </div>
+          <div role="tabpanel" id="panel-ask" aria-labelledby="tab-ask" data-panel="ask">
+            <LeadForm
+              id="form-ask"
+              type="inquiry"
+              hidden={{ cart: label, price: money(price) }}
+              fields={[
+                { name: 'topic', label: 'What do you want to know?', type: 'checkboxes', options: ['Still available?', 'Financing', 'Trade-in', 'Delivery', 'Accessories'] },
+                { name: 'message', label: 'Anything else', type: 'textarea' },
+              ]}
+            />
+          </div>
+          <div role="tabpanel" id="panel-drive" aria-labelledby="tab-drive" data-panel="drive" hidden>
+            <LeadForm
+              id="form-drive"
+              type="test-drive"
+              hidden={{ cart: label }}
+              fields={[
+                { name: 'date', label: 'Day', type: 'date', required: true, half: true },
+                { name: 'time', label: 'Time of day', type: 'select', options: ['Morning', 'Afternoon', 'Evening'], half: true },
+                { name: 'message', label: 'Notes', type: 'textarea' },
+              ]}
+              submit="Request a test drive"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {
+      similar.length > 0 && (
+        <section class="cd__similar wrap" aria-labelledby="similar-title">
+          <h2 id="similar-title">Also on the grid</h2>
+          <ul>
+            {similar.map((c) => (
+              <li>
+                <CartCard cart={c} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <div class="cd__bar">
+      <a href={site.phoneHref} data-track="cart-bar"><Icon name="phone" /> Call</a>
+      <a href="#ask" data-open-tab="ask">Ask</a>
+      <a href="#ask" data-open-tab="drive" class="cd__bar-main">Test drive</a>
+    </div>
+  </article>
+</Base>
+
+<script>
+  const views = document.querySelectorAll<HTMLElement>('[data-view]');
+  const thumbs = document.querySelectorAll<HTMLButtonElement>('[data-thumb]');
+  const count = document.querySelector('[data-count]');
+  const pad = (n: number) => String(n).padStart(2, '0');
+  let current = 0;
+  const show = (i: number) => {
+    current = (i + views.length) % views.length;
+    views.forEach((v) => (v.hidden = Number(v.dataset.view) !== current));
+    thumbs.forEach((t) => t.setAttribute('aria-pressed', String(Number(t.dataset.thumb) === current)));
+    if (count) count.textContent = `${pad(current + 1)} / ${pad(views.length)}`;
+  };
+  thumbs.forEach((t) => t.addEventListener('click', () => show(Number(t.dataset.thumb))));
+  document.querySelectorAll<HTMLButtonElement>('[data-step]').forEach((b) => b.addEventListener('click', () => show(current + Number(b.dataset.step))));
+  const stage = document.querySelector<HTMLElement>('.cd__stage');
+  let x0: number | null = null;
+  stage?.addEventListener('touchstart', (e) => (x0 = e.touches[0].clientX), { passive: true });
+  stage?.addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) show(current + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+
+  const tabs = document.querySelectorAll<HTMLButtonElement>('[data-tab]');
+  const panels = document.querySelectorAll<HTMLElement>('[data-panel]');
+  const open = (name: string, focus = false) => {
+    tabs.forEach((t) => {
+      const on = t.dataset.tab === name;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      if (on && focus) t.focus();
+    });
+    panels.forEach((p) => (p.hidden = p.dataset.panel !== name));
+  };
+  tabs.forEach((t) => {
+    t.addEventListener('click', () => open(t.dataset.tab!));
+    t.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const list = [...tabs];
+      const next = list[(list.indexOf(t) + (e.key === 'ArrowRight' ? 1 : list.length - 1)) % list.length];
+      open(next.dataset.tab!, true);
+    });
+  });
+  document.querySelectorAll<HTMLElement>('[data-open-tab]').forEach((a) => a.addEventListener('click', () => open(a.dataset.openTab!)));
+</script>
+
+<style>
+  .cd__band {
+    padding: calc(var(--header-h) + 48px) 0 36px;
+  }
+  .cd__band-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: end;
+  }
+  .cd__no {
+    width: 84px;
+    height: 84px;
+    font-size: 2.3rem;
+  }
+  .cd__crumbs {
+    color: var(--purple-300);
+    margin-bottom: 8px;
+  }
+  .cd__crumbs a {
+    color: inherit;
+  }
+  .cd__band h1 {
+    font-size: clamp(2rem, 4.6vw, 4rem);
+    margin: 0;
+  }
+  .cd__price {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+  .cd__hst {
+    font-size: 0.7rem;
+  }
+
+  .cd__gallery {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 10px;
+  }
+  .cd__gallery,
+  .cd__main > * {
+    min-width: 0;
+  }
+  .cd__stage {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--mist);
+    overflow: hidden;
+  }
+  .cd__view,
+  .cd__view :global(picture) {
+    height: 100%;
+  }
+  .cd__arrow {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 56px;
+    height: 56px;
+    border: 0;
+    background: var(--yellow);
+    color: var(--ink);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .cd__arrow--prev {
+    right: 58px;
+    transform: scaleX(-1);
+  }
+  .cd__count {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: var(--purple-950);
+    color: #fff;
+    padding: 8px 12px;
+  }
+  .cd__thumbs {
+    display: grid;
+    grid-auto-rows: 1fr;
+    gap: 6px;
+    max-height: 100%;
+    overflow-y: auto;
+  }
+  .cd__thumbs button {
+    padding: 0;
+    border: 0;
+    outline-offset: -3px;
+    background: var(--mist);
+    cursor: pointer;
+    opacity: 0.6;
+    min-height: 70px;
+    position: relative;
+  }
+  .cd__thumbs button :global(picture) {
+    height: 100%;
+    position: absolute;
+    inset: 0;
+  }
+  .cd__thumbs button[aria-pressed='true'] {
+    opacity: 1;
+    box-shadow: inset 0 0 0 4px var(--yellow);
+  }
+  .cd__thumbs button[aria-pressed='true'] :global(picture) {
+    inset: 4px;
+    height: auto;
+  }
+
+  .cd__main {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: clamp(32px, 5vw, 72px);
+    padding-block: 48px 80px;
+    align-items: start;
+  }
+  .cd__colour {
+    color: var(--ink-soft);
+  }
+  .cd__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 20px;
+  }
+  .cd__call {
+    margin-top: 14px;
+  }
+  .cd__h {
+    font-size: 1.4rem;
+    margin-top: 48px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--ink);
+  }
+  .cd__side .cd__h {
+    margin-top: 0;
+  }
+  .cd__side {
+    position: sticky;
+    top: calc(var(--header-h) + 36px);
+  }
+  .cd__specs {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  .cd__specs th,
+  .cd__specs td {
+    text-align: left;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .cd__specs th {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 600;
+    width: 32%;
+    padding-right: 16px;
+    padding-top: 13px;
+  }
+  .cd__features {
+    columns: 2 240px;
+    column-gap: 32px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .cd__features li {
+    break-inside: avoid;
+    padding: 6px 0 6px 20px;
+    position: relative;
+  }
+  .cd__features li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.95em;
+    width: 10px;
+    height: 3px;
+    background: var(--purple);
+    transform: skewX(-20deg);
+  }
+
+  .cd__ask {
+    background: var(--mist);
+    padding-block: clamp(56px, 7vw, 96px);
+  }
+  .cd__ask-grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.5fr;
+    gap: clamp(28px, 5vw, 72px);
+  }
+  .cd__tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+  }
+  .cd__tabs button {
+    background: #fff;
+    border: 0;
+    color: var(--ink);
+    padding: 10px 18px;
+    min-height: 48px;
+    font: italic 800 0.95rem var(--font);
+    font-stretch: 115%;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .cd__tabs button[aria-selected='true'] {
+    background: var(--purple);
+    color: #fff;
+  }
+  .cd__similar {
+    padding-block: clamp(56px, 7vw, 96px) 120px;
+  }
+  .cd__similar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .cd__bar {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .cd__band-inner {
+      grid-template-columns: auto 1fr;
+    }
+    .cd__price {
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
+    .cd__no {
+      width: 60px;
+      height: 60px;
+      font-size: 1.6rem;
+    }
+    .cd__gallery {
+      grid-template-columns: 1fr;
+      padding-inline: 0;
+    }
+    .cd__thumbs {
+      grid-auto-flow: column;
+      grid-auto-columns: 88px;
+      grid-auto-rows: 66px;
+      overflow-x: auto;
+      padding-inline: var(--gutter);
+    }
+    .cd__main,
+    .cd__ask-grid {
+      grid-template-columns: 1fr;
+    }
+    .cd__side {
+      position: static;
+    }
+    .cd__bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.4fr;
+      background: var(--purple-950);
+      color: #fff;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .cd__bar a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 56px;
+      font: italic 800 1rem var(--font);
+      font-stretch: 115%;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .cd__bar-main {
+      background: var(--yellow);
+      color: var(--ink);
+    }
+    .cd__similar {
+      padding-bottom: 140px;
+    }
+  }
+</style>

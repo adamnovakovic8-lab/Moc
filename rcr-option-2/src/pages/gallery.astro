@@ -1,0 +1,189 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import site from '../data/site.json';
+import builds from '../data/builds.json';
+import { getCarts } from '../lib/inventory.js';
+
+type Item = { src: string; alt: string; cat: 'builds' | 'lot' | 'shop'; caption?: string };
+const items: Item[] = [
+  { src: 'shop/lot-red-lifted.jpg', alt: 'Lifted red carts outside the shop', cat: 'shop' },
+  ...builds.flatMap((b) => b.photos.slice(0, 3).map((p, i) => ({ ...p, cat: 'builds' as const, caption: i === 0 ? b.name : undefined }))),
+  { src: 'shop/delivery-trailer.jpg', alt: 'Carts on the trailer for delivery', cat: 'shop' },
+  ...getCarts().flatMap((c) => c.photos.slice(0, 2).map((p: any) => ({ ...p, cat: 'lot' as const }))),
+  { src: 'shop/shop-detailing-limo.jpg', alt: 'Working on a red limo cart in the shop', cat: 'shop' },
+  { src: 'shop/yard-white-limo.jpg', alt: 'White limo cart in the yard', cat: 'shop' },
+  { src: 'shop/eco-lithium-battery.jpg', alt: 'Eco lithium battery installed in a cart', cat: 'shop' },
+];
+// Interleave so categories are mixed rather than in blocks
+const order = [...items].sort((a, b) => (items.indexOf(a) % 5) - (items.indexOf(b) % 5) || items.indexOf(a) - items.indexOf(b));
+const cats = [
+  { key: 'all', label: 'Everything' },
+  { key: 'builds', label: 'Custom builds' },
+  { key: 'lot', label: 'On the lot' },
+  { key: 'shop', label: 'Around the shop' },
+];
+---
+
+<Base title="Gallery — Custom Carts and the RCR Shop" description="Photos of custom golf carts built by RCR Performance, carts on the lot, and around the shop in Niagara Falls.">
+  <PageHero title="Gallery" lede={`Builds, carts on the lot, and the shop. There's more on Instagram — ${site.instagramHandle}.`} />
+
+  <section class="gal wrap section" aria-label="Photos">
+    <div class="gal__filters" role="group" aria-label="Show">
+      {cats.map((c, i) => <button type="button" data-cat={c.key} aria-pressed={i === 0 ? 'true' : 'false'}>{c.label}</button>)}
+    </div>
+    <ul class="gal__grid">
+      {
+        order.map((g) => (
+          <li class="gal__item" data-cat={g.cat}>
+            <button type="button" class="gal__open" aria-label={`Open photo: ${g.alt}`}>
+              <Photo src={g.src} alt={g.alt} sizes="(min-width: 1000px) 30vw, (min-width: 600px) 45vw, 92vw" widths={[320, 600, 900]} />
+            </button>
+            {g.caption && <p class="gal__cap marker">{g.caption}</p>}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="ig dark" aria-labelledby="ig-title">
+    <div class="wrap ig__inner">
+      <h2 id="ig-title">Follow along</h2>
+      <p>New builds and new arrivals go up on Instagram and Facebook first.</p>
+      <div class="ig__feed" data-instagram-feed></div>
+      <div class="ig__links">
+        <a href={site.socials.instagram} class="btn" rel="noopener" target="_blank"><Icon name="instagram" /> Instagram</a>
+        <a href={site.socials.facebook} class="btn btn--plain" rel="noopener" target="_blank"><Icon name="facebook" /> Facebook</a>
+      </div>
+    </div>
+  </section>
+
+  <dialog class="lb" data-lightbox aria-label="Photo">
+    <form method="dialog"><button class="lb__close" aria-label="Close"><Icon name="close" /></button></form>
+    <div class="lb__img" data-lb-img></div>
+  </dialog>
+</Base>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.gal__filters button');
+  const items = document.querySelectorAll<HTMLElement>('.gal__item');
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      items.forEach((it) => (it.hidden = b.dataset.cat !== 'all' && it.dataset.cat !== b.dataset.cat));
+    }),
+  );
+  const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+  const holder = document.querySelector<HTMLElement>('[data-lb-img]');
+  document.querySelectorAll<HTMLButtonElement>('.gal__open').forEach((btn) =>
+    btn.addEventListener('click', () => {
+      if (!dialog || !holder) return;
+      const pic = btn.querySelector('picture')!.cloneNode(true) as HTMLElement;
+      pic.querySelectorAll('source, img').forEach((el) => el.setAttribute('sizes', '92vw'));
+      holder.replaceChildren(pic);
+      dialog.showModal();
+    }),
+  );
+</script>
+
+<style>
+  .gal__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .gal__filters button {
+    min-height: 44px;
+    padding: 8px 18px;
+    border-radius: 99px;
+    border: 1.5px solid var(--paper-ink);
+    background: transparent;
+    color: var(--paper-ink);
+    font: 600 0.95rem var(--body);
+    cursor: pointer;
+  }
+  .gal__filters button[aria-pressed='true'] {
+    background: var(--ink);
+    color: #fff;
+  }
+  .gal__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 3 280px;
+    column-gap: 14px;
+  }
+  .gal__item {
+    break-inside: avoid;
+    margin-bottom: 14px;
+  }
+  .gal__open {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+  }
+  .gal__open :global(img) {
+    height: auto;
+    border-radius: 2px;
+  }
+  .gal__cap {
+    margin: 6px 0 0;
+    font-size: 1.05rem;
+  }
+  .ig {
+    padding-block: clamp(56px, 8vw, 96px);
+  }
+  .ig__inner {
+    text-align: center;
+    display: grid;
+    justify-items: center;
+  }
+  .ig__inner p {
+    color: #d6d2c8;
+  }
+  .ig__feed:empty {
+    display: none;
+  }
+  .ig__links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .lb {
+    width: min(96vw, 1200px);
+    max-width: none;
+    padding: 0;
+    border: 0;
+    background: #000;
+  }
+  .lb::backdrop {
+    background: rgb(0 0 0 / 0.88);
+  }
+  .lb__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 0;
+    background: #fff;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .lb__img :global(img) {
+    width: 100%;
+    height: auto;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+</style>

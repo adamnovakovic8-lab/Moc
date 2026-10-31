@@ -1,0 +1,163 @@
+---
+// Hand-drawn side-profile cart, parameterised from inventory data.
+// Stands in for photography until the shoot (PRD §11); when a cart has
+// photos, CartMedia shows those instead.
+interface Props {
+  colour?: string;
+  passengers?: number;
+  lifted?: boolean;
+  lights?: boolean; // headlight beam on
+  lightbar?: boolean;
+  class?: string;
+  title?: string;
+  decorative?: boolean;
+}
+const {
+  colour = '#151515',
+  passengers = 4,
+  lifted = false,
+  lights = false,
+  lightbar = false,
+  class: cls = '',
+  title = 'Golf cart illustration',
+  decorative = false,
+} = Astro.props;
+
+const L = passengers >= 6 ? 92 : 0; // extra wheelbase for a limo
+const lift = lifted ? 18 : 0;
+const r = lifted ? 34 : 28; // tire radius
+const ground = 228;
+const wy = ground - r;
+const rearX = 98;
+const frontX = 306 + L;
+const deck = 146 - lift;
+const W = 400 + L;
+const id = `c${Math.random().toString(36).slice(2, 8)}`;
+const rows = passengers >= 6 ? [62, 154, 246] : [62, 154];
+// Light bodies get dark trim, dark bodies get light trim
+const isLight = parseInt(colour.slice(1), 16) > 0xaaaaaa;
+const trim = isLight ? '#2a2a2a' : '#3a3a3e';
+---
+
+<svg
+  class:list={['cart-art', cls]}
+  viewBox={`0 0 ${W + (lights ? 160 : 0)} 250`}
+  role={decorative ? 'presentation' : 'img'}
+  aria-hidden={decorative ? 'true' : undefined}
+  aria-label={decorative ? undefined : title}
+  data-cart-art
+>
+  <defs>
+    <linearGradient id={`${id}-body`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color={colour} stop-opacity="1"></stop>
+      <stop offset="0.55" stop-color={colour}></stop>
+      <stop offset="1" stop-color="#000" stop-opacity="0.85"></stop>
+    </linearGradient>
+    <linearGradient id={`${id}-sheen`} x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"></stop>
+      <stop offset="0.5" stop-color="#fff" stop-opacity="0.35"></stop>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+    </linearGradient>
+    <radialGradient id={`${id}-beam`} cx="0" cy="0.5" r="1">
+      <stop offset="0" stop-color="var(--headlight)" stop-opacity="0.75"></stop>
+      <stop offset="1" stop-color="var(--headlight)" stop-opacity="0"></stop>
+    </radialGradient>
+    <radialGradient id={`${id}-floor`} cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#000" stop-opacity="0.7"></stop>
+      <stop offset="1" stop-color="#000" stop-opacity="0"></stop>
+    </radialGradient>
+  </defs>
+
+  <!-- floor shadow -->
+  <ellipse cx={W / 2} cy={ground + 6} rx={W / 2 - 10} ry="12" fill={`url(#${id}-floor)`}></ellipse>
+
+  {
+    lights && (
+      <path
+        class="cart-beam"
+        d={`M${W - 44} ${deck + 8} L${W + 160} ${deck - 50} L${W + 160} ${deck + 80} Z`}
+        fill={`url(#${id}-beam)`}
+      />
+    )
+  }
+
+  <!-- roof -->
+  <rect x="40" y={36 - lift} width={250 + L} height="9" rx="4" fill={trim}></rect>
+  {lightbar && <rect class="cart-lightbar" x={90 + L / 2} y={30 - lift} width="150" height="6" rx="3" fill="var(--headlight)" />}
+  <!-- struts -->
+  <path d={`M58 ${44 - lift} L64 ${deck}`} stroke={trim} stroke-width="6" stroke-linecap="round"></path>
+  <path d={`M${282 + L} ${44 - lift} L${298 + L} ${deck}`} stroke={trim} stroke-width="6" stroke-linecap="round"></path>
+  <!-- windshield -->
+  <path
+    d={`M${286 + L} ${48 - lift} L${300 + L} ${deck - 6} L${306 + L} ${deck - 6} L${292 + L} ${48 - lift} Z`}
+    fill="#cfe3ff"
+    opacity="0.35"
+  ></path>
+
+  <!-- seats -->
+  {
+    rows.map((x) => (
+      <g>
+        <rect x={x} y={deck - 52} width="16" height="54" rx="6" fill="#d9cdb8" />
+        <rect x={x + 4} y={deck - 12} width="70" height="14" rx="6" fill="#cbbfa9" />
+      </g>
+    ))
+  }
+  <!-- steering -->
+  <path d={`M${262 + L} ${deck} L${250 + L} ${deck - 34}`} stroke="#222" stroke-width="5" stroke-linecap="round"></path>
+  <ellipse cx={248 + L} cy={deck - 37} rx="11" ry="4" fill="#222" transform={`rotate(-20 ${248 + L} ${deck - 37})`}></ellipse>
+
+  <!-- chassis / lift kit -->
+  {lifted && <rect x="70" y={deck + 40} width={270 + L} height="10" fill="#1d1d1f" />}
+
+  <!-- body -->
+  <path
+    d={`M36 ${deck + 42}
+        L36 ${deck + 6} Q36 ${deck} 46 ${deck}
+        L${300 + L} ${deck}
+        Q${340 + L} ${deck + 2} ${356 + L} ${deck + 22}
+        L${362 + L} ${deck + 42}
+        Q${362 + L} ${deck + 48} ${354 + L} ${deck + 48}
+        L44 ${deck + 48} Q36 ${deck + 48} 36 ${deck + 42} Z`}
+    fill={`url(#${id}-body)`}
+    stroke="#fff"
+    stroke-opacity={isLight ? 0.1 : 0.22}
+    stroke-width="1.5"
+  ></path>
+  <!-- studio rim light along the top edge -->
+  <path
+    d={`M46 ${deck + 1} L${300 + L} ${deck + 1} Q${338 + L} ${deck + 3} ${354 + L} ${deck + 22}`}
+    fill="none"
+    stroke="var(--headlight)"
+    stroke-opacity={isLight ? 0.25 : 0.55}
+    stroke-width="2"
+  ></path>
+  <path d={`M46 ${deck + 4} L${300 + L} ${deck + 4}`} stroke={`url(#${id}-sheen)`} stroke-width="3"></path>
+  <!-- pinstripe -->
+  <path d={`M44 ${deck + 30} L${350 + L} ${deck + 30}`} stroke="var(--accent)" stroke-width="2" opacity="0.9"></path>
+  <!-- headlight + tail -->
+  <rect class="cart-headlight" x={350 + L} y={deck + 12} width="10" height="8" rx="2" fill="var(--headlight)"></rect>
+  <rect x="36" y={deck + 12} width="6" height="10" rx="2" fill="#e0262b"></rect>
+
+  <!-- wheels -->
+  {
+    [rearX, frontX].map((cx) => (
+      <g class="cart-wheel" style={`transform-origin:${cx}px ${wy}px`}>
+        <circle cx={cx} cy={wy} r={r + 6} fill="var(--ink)" />
+        <circle cx={cx} cy={wy} r={r} fill="#111" stroke="#45454a" stroke-width={lifted ? 7 : 4} stroke-dasharray={lifted ? '5 4' : '0'} />
+        <path d={`M${cx - r + 3} ${wy - 6} A ${r - 3} ${r - 3} 0 0 1 ${cx + 6} ${wy - r + 3}`} fill="none" stroke="var(--headlight)" stroke-opacity="0.35" stroke-width="2" />
+        <circle cx={cx} cy={wy} r={r * 0.55} fill="#8b8f95" />
+        <circle cx={cx} cy={wy} r={r * 0.55} fill="none" stroke="#c9ccd1" stroke-width="2" stroke-dasharray="4 6" />
+        <circle cx={cx} cy={wy} r={r * 0.16} fill="#2a2a2a" />
+      </g>
+    ))
+  }
+</svg>
+
+<style>
+  .cart-art {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+</style>
